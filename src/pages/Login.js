@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-paper";
 import React, { useState, useContext } from "react";
-import AuthenticateContext from "./context/AuthenticateContext";
+import AuthenticateContext from "../context/AuthenticateContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = () => {
@@ -29,7 +29,7 @@ const Login = () => {
   const handleSubmit = async () => {
     if (email || password) {
       try {
-        await AsyncStorage.setItem("email", email);
+        await AsyncStorage.setItem("user", email);
         auth.changeRoute(true);
         setUserDetail(creds);
       } catch (e) {
@@ -58,7 +58,7 @@ const Login = () => {
         <View style={styles.Logo_container}>
           <Image
             style={styles.tinyLogo}
-            source={require("../assets/croped.png")}
+            source={require("../../assets/croped.png")}
           />
         </View>
         <Text style={styles.loginText}>Sign In</Text>

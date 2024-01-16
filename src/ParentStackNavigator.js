@@ -3,12 +3,20 @@ import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Login from "./Login";
-import Register from "./Register";
-import Home from "./Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
 import AuthenticateContext from "./context/AuthenticateContext";
-import { BottomNavigation, Icon, IconButton } from "react-native-paper";
-import Profile from "./Profile";
+import Profile from "./pages/Profile";
+import Users from "./pages/Users";
+import {
+  Ionicons,
+  FontAwesome,
+  MaterialCommunityIcons,
+  FontAwesome5,
+} from "@expo/vector-icons";
+import Cart from "./pages/Cart";
+import Orders from "./pages/Orders";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,6 +28,7 @@ const Authentication = () => {
 
 const ParentStackNavigator = () => {
   const auth = useContext(AuthenticateContext);
+  const role = 1;
 
   return (
     <React.Fragment>
@@ -29,15 +38,68 @@ const ParentStackNavigator = () => {
         <NavigationContainer>
           <Tab.Navigator>
             <Tab.Screen
-              // options={{
-              //   tabBarIcon: () => (
-              //     <IconButton name="home" color="grey" size={200} />
-              //   ),
-              // }}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="home" size={size} color={color} />
+                ),
+              }}
               name="Home"
               component={Home}
             />
-            <Tab.Screen name="Profile" component={Profile} />
+            {role === 1 && (
+              <Tab.Screen
+                options={{
+                  tabBarIcon: ({ color, size }) => (
+                    <FontAwesome5
+                      name="cart-arrow-down"
+                      size={size}
+                      color={color}
+                    />
+                  ),
+                }}
+                name="Orders"
+                component={Orders}
+              />
+            )}
+            {role === 1 ? (
+              <Tab.Screen
+                options={{
+                  tabBarIcon: ({ color, size }) => (
+                    <FontAwesome name="user" size={size} color={color} />
+                  ),
+                }}
+                name="Users"
+                component={Users}
+              />
+            ) : (
+              <Tab.Screen
+                options={{
+                  tabBarIcon: ({ color, size }) => (
+                    <FontAwesome
+                      name="shopping-cart"
+                      size={size}
+                      color={color}
+                    />
+                  ),
+                }}
+                name="Cart"
+                component={Cart}
+              />
+            )}
+
+            <Tab.Screen
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons
+                    name="face-man-profile"
+                    size={size}
+                    color={color}
+                  />
+                ),
+              }}
+              name="Profile"
+              component={Profile}
+            />
           </Tab.Navigator>
         </NavigationContainer>
       )}

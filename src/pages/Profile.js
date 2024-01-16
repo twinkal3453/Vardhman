@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import React, { useContext } from "react";
-import AuthenticateContext from "./context/AuthenticateContext";
+import AuthenticateContext from "../context/AuthenticateContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Profile = () => {
@@ -8,7 +8,7 @@ const Profile = () => {
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.removeItem("email");
+      await AsyncStorage.removeItem("user");
       auth.changeRoute(false);
     } catch (e) {
       // remove error

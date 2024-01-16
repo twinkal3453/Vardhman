@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
-import AuthenticateContext from "./context/AuthenticateContext";
+import AuthenticateContext from "../context/AuthenticateContext";
 
 const Home = () => {
   const auth = useContext(AuthenticateContext);

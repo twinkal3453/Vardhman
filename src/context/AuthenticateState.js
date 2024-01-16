@@ -8,7 +8,7 @@ const AuthenticateState = (props) => {
 
   useEffect(() => {
     const checkAuthentication = async () => {
-      const isAuthenticated = await AsyncStorage.getItem("email");
+      const isAuthenticated = await AsyncStorage.getItem("user");
       console.log("Is Authenticated:", isAuthenticated);
 
       if (isAuthenticated) {

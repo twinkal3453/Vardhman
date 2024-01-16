@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { TextInput } from "react-native-paper";
-import AuthenticateContext from "./context/AuthenticateContext";
+import AuthenticateContext from "../context/AuthenticateContext";
 
 const Register = () => {
   const auth = useContext(AuthenticateContext);
@@ -58,7 +58,7 @@ const Register = () => {
         <View style={styles.Logo_container}>
           <Image
             style={styles.tinyLogo}
-            source={require("../assets/croped.png")}
+            source={require("../../assets/croped.png")}
           />
         </View>
         <Text style={styles.loginText}>Sign Up</Text>
