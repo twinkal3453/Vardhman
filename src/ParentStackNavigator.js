@@ -17,6 +17,7 @@ import {
 } from "@expo/vector-icons";
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
+import UserDetail from "./pages/UserDetail";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -42,6 +43,7 @@ const ParentStackNavigator = () => {
                 tabBarIcon: ({ color, size }) => (
                   <Ionicons name="home" size={size} color={color} />
                 ),
+                headerShown: false,
               }}
               name="Home"
               component={Home}

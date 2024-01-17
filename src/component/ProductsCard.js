@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-const UsersCard = ({ item }) => {
+const ProductsCard = ({ item }) => {
+  const navigation = useNavigation();
   // handling managing single user.
   const handleUser = (data) => {
     console.log("Line 7", data);
+    navigation.navigate("Detail");
   };
   return (
     <Pressable onPress={() => handleUser(item)} style={styles.list_card}>
@@ -62,4 +65,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UsersCard;
+export default ProductsCard;
