@@ -1,6 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useState, useEffect, useContext } from "react";
-import AuthenticateContext from "../context/AuthenticateContext";
+import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeList from "../pageComponents/Home/HomeList";
 import HomeDetail from "../pageComponents/Home/HomeDetail";
@@ -15,11 +13,5 @@ const Home = () => {
     </Stack.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  MainComponent: {
-    padding: 10,
-  },
-});
 
 export default Home;

@@ -17,7 +17,6 @@ import {
 } from "@expo/vector-icons";
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
-import UserDetail from "./pages/UserDetail";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -45,7 +44,7 @@ const ParentStackNavigator = () => {
                 ),
                 headerShown: false,
               }}
-              name="Home"
+              name="Homes"
               component={Home}
             />
             {role === 1 && (
@@ -58,6 +57,7 @@ const ParentStackNavigator = () => {
                       color={color}
                     />
                   ),
+                  headerShown: false,
                 }}
                 name="Orders"
                 component={Orders}
@@ -69,6 +69,7 @@ const ParentStackNavigator = () => {
                   tabBarIcon: ({ color, size }) => (
                     <FontAwesome name="user" size={size} color={color} />
                   ),
+                  headerShown: false,
                 }}
                 name="Users"
                 component={Users}
@@ -83,6 +84,7 @@ const ParentStackNavigator = () => {
                       color={color}
                     />
                   ),
+                  headerShown: false,
                 }}
                 name="Cart"
                 component={Cart}
@@ -98,6 +100,7 @@ const ParentStackNavigator = () => {
                     color={color}
                   />
                 ),
+                // headerShown: false,
               }}
               name="Profile"
               component={Profile}
