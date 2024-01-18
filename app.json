@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-   
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,17 +16,27 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "permissions": ["VIBRATE"]
+      "permissions": [
+        "VIBRATE"
+      ]
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff",
-        "permissions": ["VIBRATE"]
-      }
+        "permissions": [
+          "VIBRATE"
+        ]
+      },
+      "package": "com.twinkal_raj.Vardhman"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6379510f-6b1e-4b2b-9446-52f0fdda1e7c"
+      }
     }
   }
 }
