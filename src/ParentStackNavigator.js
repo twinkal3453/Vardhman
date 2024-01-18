@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import AuthenticateContext from "./context/AuthenticateContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Profile from "./pages/Profile";
 import Users from "./pages/Users";
 import {
@@ -26,12 +27,17 @@ const Authentication = () => {
 };
 
 const ParentStackNavigator = () => {
-  const auth = useContext(AuthenticateContext);
-  const role = 0;
+  const [role, setRole] = useState(0);
+  const data = useContext(AuthenticateContext);
+
+  useEffect(() => {
+    console.log("Initiated role", role);
+    setRole(data.role);
+  }, [data.role]);
 
   return (
     <React.Fragment>
-      {!auth.initialRoute ? (
+      {!data.initialRoute ? (
         <Authentication />
       ) : (
         <NavigationContainer>

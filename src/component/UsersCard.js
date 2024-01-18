@@ -7,7 +7,9 @@ const UsersCard = ({ item }) => {
   const navigation = useNavigation();
   // handling managing single user.
   const handleUser = (data) => {
-    navigation.navigate("User Detail");
+    navigation.navigate("User Detail", {
+      data: data,
+    });
   };
   return (
     <Pressable onPress={() => handleUser(item)} style={styles.list_card}>

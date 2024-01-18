@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Image,
+  Switch,
 } from "react-native";
 import { TextInput } from "react-native-paper";
 import React, { useState, useContext } from "react";
@@ -21,16 +22,25 @@ const Login = () => {
   const [userDetail, setUserDetail] = useState(creds);
   const { email, password } = userDetail;
   const [eyeChange, setEyeChange] = useState(false);
+  const [role, setRole] = useState(0);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   const handleCreds = (name) => (value) => {
     setUserDetail({ ...userDetail, [name]: value });
   };
 
   const handleSubmit = async () => {
-    if (email || password) {
+    if (email && password) {
+      const data = {
+        email: email,
+        role: isEnabled ? 1 : 0,
+      };
+
       try {
-        await AsyncStorage.setItem("user", email);
+        await AsyncStorage.setItem("user", JSON.stringify(data));
         auth.changeRoute(true);
+        auth.handleRole(isEnabled ? 1 : 0);
         setUserDetail(creds);
       } catch (e) {
         // saving error
@@ -83,7 +93,17 @@ const Login = () => {
           value={password}
           onChangeText={handleCreds("password")}
         />
-        <View>
+        <View style={styles.accountType}>
+          <View style={styles.switch_content}>
+            <Switch
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitch}
+              value={isEnabled}
+            />
+            <Text style={styles.isAdmin_text}>Is Admin</Text>
+          </View>
           <Text style={styles.accountText}>
             Don't have an Account?{" "}
             <Text style={styles.signUp} onPress={handleAccount}>
@@ -125,6 +145,20 @@ const styles = StyleSheet.create({
   },
   inputField: {
     marginBottom: 10,
+  },
+  accountType: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  switch_content: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  isAdmin_text: {
+    marginLeft: 5,
   },
   accountText: {
     textAlign: "right",

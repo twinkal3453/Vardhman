@@ -5,12 +5,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const AuthenticateState = (props) => {
   const [signUp, setSignUp] = useState(false);
   const [initialRoute, setInitialRoute] = useState(false);
+  const [role, setRole] = useState(0);
 
   useEffect(() => {
     const checkAuthentication = async () => {
-      const isAuthenticated = await AsyncStorage.getItem("user");
-      console.log("Is Authenticated:", isAuthenticated);
-
+      const jsonValue = await AsyncStorage.getItem("user");
+      const isAuthenticated = JSON.parse(jsonValue);
+      setRole(isAuthenticated.role);
       if (isAuthenticated) {
         setInitialRoute(true);
       }
@@ -18,6 +19,10 @@ const AuthenticateState = (props) => {
 
     checkAuthentication();
   }, []);
+
+  const handleRole = (data) => {
+    setRole(data);
+  };
 
   const handleAuth = (data) => {
     setSignUp(data);
@@ -29,7 +34,14 @@ const AuthenticateState = (props) => {
 
   return (
     <AuthenticateContext.Provider
-      value={{ signUp, initialRoute, handleAuth, changeRoute }}
+      value={{
+        signUp,
+        initialRoute,
+        role,
+        handleAuth,
+        changeRoute,
+        handleRole,
+      }}
     >
       {props.children}
     </AuthenticateContext.Provider>

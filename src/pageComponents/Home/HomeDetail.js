@@ -1,10 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-const HomeDetail = () => {
+const HomeDetail = ({ route }) => {
+  const { data } = route.params;
+  console.log("Line 7>>>>", data);
+
   return (
     <View style={styles.detail_component}>
-      <Text>HomeDetail</Text>
+      <Text>{data.name}</Text>
     </View>
   );
 };

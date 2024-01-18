@@ -7,8 +7,9 @@ const ProductsCard = ({ item }) => {
   const navigation = useNavigation();
   // handling managing single user.
   const handleUser = (data) => {
-    console.log("Line 7", data);
-    navigation.navigate("Detail");
+    navigation.navigate("Detail", {
+      data: data,
+    });
   };
   return (
     <Pressable onPress={() => handleUser(item)} style={styles.list_card}>

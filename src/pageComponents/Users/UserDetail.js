@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-const UserDetail = () => {
+const UserDetail = ({ route }) => {
+  const { data } = route.params;
   return (
     <View style={styles.main_detail}>
-      <Text>This is Twinkal</Text>
+      <Text>This is {data.name}</Text>
     </View>
   );
 };

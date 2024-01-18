@@ -15,6 +15,7 @@ const Profile = () => {
       await AsyncStorage.removeItem("user");
       // Vibration.vibrate(500);
       auth.changeRoute(false);
+      auth.handleRole();
     } catch (e) {
       // remove error
     }
