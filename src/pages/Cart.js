@@ -1,18 +1,17 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import CartList from "../pageComponents/Cart/CartList";
+import CartDetail from "../pageComponents/Cart/CartDetail";
+
+const Stack = createNativeStackNavigator();
 
 const Cart = () => {
   return (
-    <View style={styles.cart_container}>
-      <Text>This is cart</Text>
-    </View>
+    <Stack.Navigator initialRouteName="Cart List">
+      <Stack.Screen name="Cart List" component={CartList} />
+      <Stack.Screen name="Cart Detail" component={CartDetail} />
+    </Stack.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  cart_container: {
-    padding: 10,
-  },
-});
 
 export default Cart;

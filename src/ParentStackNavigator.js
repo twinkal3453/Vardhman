@@ -18,7 +18,6 @@ import {
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
 
-const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Authentication = () => {
@@ -28,7 +27,7 @@ const Authentication = () => {
 
 const ParentStackNavigator = () => {
   const auth = useContext(AuthenticateContext);
-  const role = 1;
+  const role = 0;
 
   return (
     <React.Fragment>
