@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { TextInput } from "react-native-paper";
-import AuthenticateContext from "../context/AuthenticateContext";
+import AuthenticateContext from "../context/auth/AuthenticateContext";
 
 const Register = () => {
   const auth = useContext(AuthenticateContext);
@@ -126,7 +126,7 @@ const Register = () => {
           <Text style={styles.accountText}>
             Have an Account?{" "}
             <Text style={styles.signUp} onPress={handleAccount}>
-              Sign Up
+              Sign In
             </Text>
           </Text>
         </View>

@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 
 const HomeDetail = ({ route }) => {
   const { data } = route.params;
-  console.log("Line 7>>>>", data);
 
   return (
     <View style={styles.detail_component}>

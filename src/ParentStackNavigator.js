@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
-import AuthenticateContext from "./context/AuthenticateContext";
+import AuthenticateContext from "./context/auth/AuthenticateContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Profile from "./pages/Profile";
 import Users from "./pages/Users";
@@ -18,6 +17,7 @@ import {
 } from "@expo/vector-icons";
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
+import { isAuthenticated } from "./Helper/isAuthenticated";
 
 const Tab = createBottomTabNavigator();
 
@@ -30,8 +30,23 @@ const ParentStackNavigator = () => {
   const [role, setRole] = useState(0);
   const data = useContext(AuthenticateContext);
 
+  // Handling auth of user to be redirected either to the home page and the logoin
+  const handleAuth = async () => {
+    try {
+      const userData = await AsyncStorage.getItem("user");
+      // Vibration.vibrate(500);
+      const user = JSON.parse(userData);
+      console.log("Line 38", user);
+
+      auth.changeRoute(false);
+      auth.handleRole();
+    } catch (e) {
+      // remove error
+    }
+  };
+
   useEffect(() => {
-    console.log("Initiated role", role);
+    handleAuth();
     setRole(data.role);
   }, [data.role]);
 

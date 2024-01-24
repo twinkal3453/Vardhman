@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import React, { useContext } from "react";
-import AuthenticateContext from "../context/AuthenticateContext";
+import AuthenticateContext from "../context/auth/AuthenticateContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Vibration } from "expo";
 import { Avatar, Button, Card } from "react-native-paper";

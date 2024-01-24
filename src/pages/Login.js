@@ -10,8 +10,10 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-paper";
 import React, { useState, useContext } from "react";
-import AuthenticateContext from "../context/AuthenticateContext";
+import AuthenticateContext from "../context/auth/AuthenticateContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { API } from "../../backend";
 
 const Login = () => {
   const auth = useContext(AuthenticateContext);
@@ -22,30 +24,49 @@ const Login = () => {
   const [userDetail, setUserDetail] = useState(creds);
   const { email, password } = userDetail;
   const [eyeChange, setEyeChange] = useState(false);
-  const [role, setRole] = useState(0);
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   const handleCreds = (name) => (value) => {
     setUserDetail({ ...userDetail, [name]: value });
   };
 
+  // storing the data to the async storage
+  const storeData = async (data) => {
+    console.log("Line >>>> 34", data);
+    try {
+      await AsyncStorage.setItem("user", JSON.stringify(data));
+      auth.changeRoute(true);
+
+      setUserDetail(creds);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit = async () => {
     if (email && password) {
       const data = {
-        email: email,
-        role: isEnabled ? 1 : 0,
+        firebase_token: "",
+        username: email,
+        password: password,
       };
 
-      try {
-        await AsyncStorage.setItem("user", JSON.stringify(data));
-        auth.changeRoute(true);
-        auth.handleRole(isEnabled ? 1 : 0);
-        setUserDetail(creds);
-      } catch (e) {
-        // saving error
-        console.log("error", e);
-      }
+      axios
+        .post(`${API()}/user_login`, data, {
+          Headers: {
+            Accept: "application/json",
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            const resData = response.data;
+            auth.handleRole(parseInt(resData.userData.role));
+            const data = JSON.stringify(resData);
+            storeData(data);
+          }
+        })
+        .catch((error) => {
+          console.log("Line 50", error);
+        });
     }
   };
 
@@ -53,6 +74,7 @@ const Login = () => {
     auth.handleAuth(true);
   };
 
+  // function is for forgot password
   const handleForgot = () => {
     console.log("Forgot Password!");
   };
@@ -93,17 +115,7 @@ const Login = () => {
           value={password}
           onChangeText={handleCreds("password")}
         />
-        <View style={styles.accountType}>
-          <View style={styles.switch_content}>
-            <Switch
-              trackColor={{ false: "#767577", true: "#81b0ff" }}
-              thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
-            <Text style={styles.isAdmin_text}>Is Admin</Text>
-          </View>
+        <View>
           <Text style={styles.accountText}>
             Don't have an Account?{" "}
             <Text style={styles.signUp} onPress={handleAccount}>
@@ -114,13 +126,13 @@ const Login = () => {
         <Pressable style={styles.pressable} onPress={handleSubmit}>
           <Text style={styles.pressText}>Sign In</Text>
         </Pressable>
-        <Text style={styles.forgot} onPress={handleForgot}>
-          Forgot Password?
-        </Text>
       </View>
     </TouchableWithoutFeedback>
   );
 };
+// <Text style={styles.forgot} onPress={handleForgot}>
+//   Forgot Password?
+// </Text>
 
 const styles = StyleSheet.create({
   login_container: {
@@ -146,12 +158,7 @@ const styles = StyleSheet.create({
   inputField: {
     marginBottom: 10,
   },
-  accountType: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
+
   switch_content: {
     display: "flex",
     flexDirection: "row",

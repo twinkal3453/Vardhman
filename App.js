@@ -4,7 +4,7 @@ import {
   PaperProvider,
 } from "react-native-paper";
 import ParentStackNavigator from "./src/ParentStackNavigator";
-import AuthenticateState from "./src/context/AuthenticateState";
+import AuthenticateState from "./src/context/auth/AuthenticateState";
 
 const theme = {
   ...DefaultTheme,
