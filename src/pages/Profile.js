@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import AuthenticateContext from "../context/auth/AuthenticateContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Vibration } from "expo";
 import { Avatar, Button, Card } from "react-native-paper";
+import { useFocusEffect } from "@react-navigation/native";
 
 const LeftContent = (props) => <Avatar.Icon {...props} icon="account" />;
 
@@ -20,6 +21,12 @@ const Profile = () => {
       // remove error
     }
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("Line 69 Hello Profile");
+    }, [])
+  );
 
   return (
     <View style={styles.MainComponent}>

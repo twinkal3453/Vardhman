@@ -1,67 +1,97 @@
-import { Pressable, StyleSheet, Text, View, FlatList } from "react-native";
-import React from "react";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  RefreshControl,
+} from "react-native";
+import React, { useCallback, useState } from "react";
 import ProductsCard from "../../component/ProductsCard";
-
-const proDetail = [
-  {
-    name: "Pulse",
-    email: "twinkal@gmail.com",
-    phone: 76673736660,
-  },
-  {
-    name: "Wheat",
-    email: "nikhil@gmail.com",
-    phone: 2342342344,
-  },
-  {
-    name: "Flour",
-    email: "twin@gmail.com",
-    phone: 3849384938,
-  },
-  {
-    name: "Colgate",
-    email: "prince@gmail.com",
-    phone: 4874847384,
-  },
-  {
-    name: "Bran",
-    email: "bran@gmail.com",
-    phone: 4749503982,
-  },
-  {
-    name: "Bran",
-    email: "bran@gmail.com",
-    phone: 9000909090,
-  },
-  {
-    name: "Cashew nut",
-    email: "cashew@gmail.com",
-    phone: 1212121212,
-  },
-  {
-    name: "Peanut",
-    email: "peanut@gmail.com",
-    phone: 3847374573,
-  },
-  {
-    name: "Raisin",
-    email: "raisin@gmail.com",
-    phone: 7438740904,
-  },
-  {
-    name: "Tamrind",
-    email: "tamrind@gmail.com",
-    phone: 9090909009,
-  },
-];
+import { useFocusEffect } from "@react-navigation/native";
+import axios from "axios";
+import { ApiTokenHeader } from "../../Helper/ApiTokenHeader";
+import { API } from "../../../backend";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Searchbar } from "react-native-paper";
 
 const HomeList = ({ navigation }) => {
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [refreshing, setRefreshing] = useState(false);
+  const [products, setProducts] = useState([]);
+
+  const getProducts = async () => {
+    try {
+      const userData = JSON.parse(await AsyncStorage.getItem("user"));
+      // Vibration.vibrate(500);
+      const user = JSON.parse(userData);
+
+      console.log("Line 29", user.token);
+
+      // Making the Actual Api Call
+      await axios
+        .get(`${API()}/get_all_product_list`, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            const data = response.data.data;
+            setProducts(data);
+            setRefreshing(false);
+          }
+        })
+        .catch((error) => {
+          console.log("Line 76", error);
+        });
+    } catch (e) {
+      // remove error
+      console.log("Line 11 error", e);
+    }
+  };
+
+  //Function will excute when user pull down the screen to refresh the data.
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    getProducts();
+  }, []);
+
+  // when screen will active then this screen will auto refresh.
+  useFocusEffect(
+    useCallback(() => {
+      getProducts();
+    }, [])
+  );
+
+  const getSerchedValue = (data) => {
+    const query = searchQuery.toLowerCase();
+    const value = data.filter((item) =>
+      item.product_name_eng.toLowerCase().includes(query)
+    );
+    return value;
+  };
+
   return (
     <View style={styles.main_component}>
+      <View style={styles.searchBar}>
+        <Searchbar
+          style={styles.search}
+          elevation={1}
+          placeholder="Search"
+          onChangeText={setSearchQuery}
+          value={searchQuery}
+        />
+      </View>
       <FlatList
-        data={proDetail}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        data={getSerchedValue(products)}
         renderItem={({ item }) => <ProductsCard item={item} />}
-        keyExtractor={(item) => item.phone}
+        keyExtractor={(item) => item.id}
       />
     </View>
   );
@@ -70,6 +100,14 @@ const HomeList = ({ navigation }) => {
 const styles = StyleSheet.create({
   main_component: {
     padding: 2,
+  },
+  searchBar: {
+    padding: 3,
+  },
+  search: {
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "grey",
   },
 });
 

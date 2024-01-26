@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AuthenticateContext from "./AuthenticateContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthenticateState = (props) => {
   const [signUp, setSignUp] = useState(false);
@@ -17,6 +18,25 @@ const AuthenticateState = (props) => {
   const changeRoute = (data) => {
     setInitialRoute(data);
   };
+
+  //Function is to make sure that user is already logged in or not.
+  const handleRouteAuth = async () => {
+    try {
+      const userData = JSON.parse(await AsyncStorage.getItem("user"));
+
+      const user = JSON.parse(userData);
+      if (user) {
+        setInitialRoute(true);
+        setRole(parseInt(user.userData.role));
+      }
+    } catch (e) {
+      // remove error
+    }
+  };
+
+  useEffect(() => {
+    handleRouteAuth();
+  }, []);
 
   return (
     <AuthenticateContext.Provider

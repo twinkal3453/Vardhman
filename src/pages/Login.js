@@ -6,7 +6,10 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Image,
-  Switch,
+  SafeAreaView,
+  StatusBar,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { TextInput } from "react-native-paper";
 import React, { useState, useContext } from "react";
@@ -31,7 +34,6 @@ const Login = () => {
 
   // storing the data to the async storage
   const storeData = async (data) => {
-    console.log("Line >>>> 34", data);
     try {
       await AsyncStorage.setItem("user", JSON.stringify(data));
       auth.changeRoute(true);
@@ -46,7 +48,7 @@ const Login = () => {
     if (email && password) {
       const data = {
         firebase_token: "",
-        username: email,
+        username: email.toLowerCase(),
         password: password,
       };
 
@@ -85,49 +87,57 @@ const Login = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.login_container}>
-        <View style={styles.Logo_container}>
-          <Image
-            style={styles.tinyLogo}
-            source={require("../../assets/croped.png")}
-          />
-        </View>
-        <Text style={styles.loginText}>Sign In</Text>
-        <TextInput
-          style={styles.inputField}
-          mode="outlined"
-          label="Email"
-          value={email}
-          onChangeText={handleCreds("email")}
-        />
-        <TextInput
-          right={
-            <TextInput.Icon
-              onPress={handleChangeIcon}
-              icon={eyeChange ? "eye" : "eye-off"}
+    <SafeAreaView style={styles.container}>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20} // You may need to adjust this value
+        >
+          <View style={styles.login_container}>
+            <View style={styles.Logo_container}>
+              <Image
+                style={styles.tinyLogo}
+                source={require("../../assets/croped.png")}
+              />
+            </View>
+            <Text style={styles.loginText}>Sign In</Text>
+            <TextInput
+              style={styles.inputField}
+              mode="outlined"
+              label="Email"
+              value={email}
+              onChangeText={handleCreds("email")}
             />
-          }
-          style={styles.inputField}
-          secureTextEntry={!eyeChange}
-          mode="outlined"
-          label="Password"
-          value={password}
-          onChangeText={handleCreds("password")}
-        />
-        <View>
-          <Text style={styles.accountText}>
-            Don't have an Account?{" "}
-            <Text style={styles.signUp} onPress={handleAccount}>
-              Sign Up
-            </Text>
-          </Text>
-        </View>
-        <Pressable style={styles.pressable} onPress={handleSubmit}>
-          <Text style={styles.pressText}>Sign In</Text>
-        </Pressable>
-      </View>
-    </TouchableWithoutFeedback>
+            <TextInput
+              right={
+                <TextInput.Icon
+                  onPress={handleChangeIcon}
+                  icon={eyeChange ? "eye" : "eye-off"}
+                />
+              }
+              style={styles.inputField}
+              secureTextEntry={!eyeChange}
+              mode="outlined"
+              label="Password"
+              value={password}
+              onChangeText={handleCreds("password")}
+            />
+            <View>
+              <Text style={styles.accountText}>
+                Don't have an Account?{" "}
+                <Text style={styles.signUp} onPress={handleAccount}>
+                  Sign Up
+                </Text>
+              </Text>
+            </View>
+            <Pressable style={styles.pressable} onPress={handleSubmit}>
+              <Text style={styles.pressText}>Sign In</Text>
+            </Pressable>
+          </View>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 };
 // <Text style={styles.forgot} onPress={handleForgot}>
@@ -135,6 +145,10 @@ const Login = () => {
 // </Text>
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: StatusBar.currentHeight,
+  },
   login_container: {
     padding: 10,
     flex: 1,

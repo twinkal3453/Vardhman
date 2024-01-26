@@ -6,7 +6,6 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import AuthenticateContext from "./context/auth/AuthenticateContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Profile from "./pages/Profile";
 import Users from "./pages/Users";
 import {
@@ -27,28 +26,7 @@ const Authentication = () => {
 };
 
 const ParentStackNavigator = () => {
-  const [role, setRole] = useState(0);
   const data = useContext(AuthenticateContext);
-
-  // Handling auth of user to be redirected either to the home page and the logoin
-  const handleAuth = async () => {
-    try {
-      const userData = await AsyncStorage.getItem("user");
-      // Vibration.vibrate(500);
-      const user = JSON.parse(userData);
-      console.log("Line 38", user);
-
-      auth.changeRoute(false);
-      auth.handleRole();
-    } catch (e) {
-      // remove error
-    }
-  };
-
-  useEffect(() => {
-    handleAuth();
-    setRole(data.role);
-  }, [data.role]);
 
   return (
     <React.Fragment>
@@ -67,7 +45,7 @@ const ParentStackNavigator = () => {
               name="Homes"
               component={Home}
             />
-            {role === 1 && (
+            {data.role === 1 && (
               <Tab.Screen
                 options={{
                   tabBarIcon: ({ color, size }) => (
@@ -83,7 +61,7 @@ const ParentStackNavigator = () => {
                 component={Orders}
               />
             )}
-            {role === 1 ? (
+            {data.role === 1 ? (
               <Tab.Screen
                 options={{
                   tabBarIcon: ({ color, size }) => (
