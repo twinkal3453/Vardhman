@@ -21,7 +21,7 @@ const ProductsCard = ({ item }) => {
     });
   };
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.safe_view}>
       <Pressable onPress={() => handleUser(item)} style={styles.list_card}>
         <View style={styles.img_section}>
           {/*<FontAwesome name="user" size={35} color="grey" />*/}

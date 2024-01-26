@@ -26,8 +26,6 @@ const HomeList = ({ navigation }) => {
       // Vibration.vibrate(500);
       const user = JSON.parse(userData);
 
-      console.log("Line 29", user.token);
-
       // Making the Actual Api Call
       await axios
         .get(`${API()}/get_all_product_list`, {
@@ -100,6 +98,7 @@ const HomeList = ({ navigation }) => {
 const styles = StyleSheet.create({
   main_component: {
     padding: 2,
+    flex: 1,
   },
   searchBar: {
     padding: 3,

@@ -6,6 +6,7 @@ const AuthenticateState = (props) => {
   const [signUp, setSignUp] = useState(false);
   const [initialRoute, setInitialRoute] = useState(false);
   const [role, setRole] = useState(0);
+  const [userData, setUserData] = useState([]);
 
   const handleRole = (data) => {
     setRole(data);
@@ -26,6 +27,7 @@ const AuthenticateState = (props) => {
 
       const user = JSON.parse(userData);
       if (user) {
+        setUserData(user.userData);
         setInitialRoute(true);
         setRole(parseInt(user.userData.role));
       }
@@ -44,6 +46,7 @@ const AuthenticateState = (props) => {
         signUp,
         initialRoute,
         role,
+        userData,
 
         handleAuth,
         changeRoute,
