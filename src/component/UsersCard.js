@@ -1,68 +1,77 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
-import React from "react";
-import { FontAwesome } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, Text, View } from "react-native";
+import { Avatar, Button, Card, Switch } from "react-native-paper";
+import React, { useState } from "react";
+
+const LeftContent = (props) => <Avatar.Icon {...props} icon="account" />;
 
 const UsersCard = ({ item }) => {
-  const navigation = useNavigation();
-  // handling managing single user.
-  const handleUser = (data) => {
-    navigation.navigate("User Detail", {
-      data: data,
-    });
-  };
+  const data = item;
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
+
+  const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+
   return (
-    <Pressable onPress={() => handleUser(item)} style={styles.list_card}>
-      <View style={styles.img_section}>
-        <FontAwesome name="user" size={35} color="grey" />
-      </View>
-      <View style={styles.content_section}>
-        <Text>
-          <Text style={styles.content}>Name:</Text> {item.name}
-        </Text>
-        <Text>
-          <Text style={styles.content}>Email:</Text> {item.email}
-        </Text>
-        <Text>
-          <Text style={styles.content}>Phone:</Text> {item.contact_no}
-        </Text>
-      </View>
-    </Pressable>
+    <View style={styles.main_detail}>
+      <Card>
+        <Card.Title
+          title={data.name}
+          titleVariant="titleLarge"
+          subtitle={data.email}
+          left={LeftContent}
+          right={(prpps) => (
+            <View style={styles.switch_parent}>
+              <Switch
+                style={styles.switches}
+                {...prpps}
+                value={isSwitchOn}
+                onValueChange={onToggleSwitch}
+              />
+              <Text>{isSwitchOn ? "Active" : "Inactive"}</Text>
+            </View>
+          )}
+        />
+        <Card.Content>
+          <Text variant="titleLarge">
+            <Text style={styles.titleHead}>Phone: </Text>
+            {data.contact_no}
+          </Text>
+          <Text variant="bodyMedium">
+            <Text style={styles.titleHead}>Address: </Text>
+            {data.address}
+          </Text>
+        </Card.Content>
+        {/**
+      
+        <Card.Actions>
+          <Button>Cancel</Button>
+          <Button>Ok</Button>
+        </Card.Actions>
+      
+      */}
+      </Card>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  list_card: {
-    backgroundColor: "white",
-    borderRadius: 5,
-    padding: 10,
-    margin: 5,
-
-    // Android
-    elevation: 5,
-
-    // iOS
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
+  item_img: {
+    borderRadius: 4,
+    padding: 5,
   },
-  img_section: {
-    marginRight: 10,
-    height: 50,
-    width: 50,
+  main_detail: {
+    padding: 5,
+  },
+  titleHead: {
+    fontWeight: "600",
+  },
+  switch_parent: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#d4d4d4",
-    borderRadius: 3,
+    paddingRight: 10,
   },
-  content: {
-    fontWeight: "600",
+  switches: {
+    marginBottom: 5,
   },
 });
 

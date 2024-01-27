@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import UserList from "../pageComponents/Users/UserList";
-import UserDetail from "../pageComponents/Users/UserDetail";
 import { View } from "react-native";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import LoaderContext from "../context/loader/LoaderContext";
@@ -13,10 +12,9 @@ const Users = () => {
 
   return (
     <Stack.Navigator initialRouteName="User List">
-      <Stack.Screen name="User List" component={UserList} />
       <Stack.Screen
-        name="User Detail"
-        component={UserDetail}
+        name="User List"
+        component={UserList}
         options={{
           headerRight: () => (
             <View style={{ marginRight: 10 }}>
