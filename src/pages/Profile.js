@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AuthenticateContext from "../context/auth/AuthenticateContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Vibration } from "expo";
@@ -9,6 +9,7 @@ import { useFocusEffect } from "@react-navigation/native";
 const LeftContent = (props) => <Avatar.Icon {...props} icon="account" />;
 
 const Profile = () => {
+  const [userDetail, setuserDetail] = useState([]);
   const auth = useContext(AuthenticateContext);
 
   const handleLogout = async () => {
@@ -21,10 +22,22 @@ const Profile = () => {
       // remove error
     }
   };
+  //Function is to make sure that user is already logged in or not.
+  const handleRouteAuth = async () => {
+    try {
+      const userData = JSON.parse(await AsyncStorage.getItem("user"));
+
+      const user = JSON.parse(userData);
+      console.log("LIne 30", user.userData);
+      setuserDetail(user.userData);
+    } catch (e) {
+      // remove error
+    }
+  };
 
   useFocusEffect(
     React.useCallback(() => {
-      console.log("Line 69 Hello Profile");
+      handleRouteAuth();
     }, [])
   );
 
@@ -32,18 +45,19 @@ const Profile = () => {
     <View style={styles.MainComponent}>
       <Card>
         <Card.Title
-          title="Twinkal Raj"
+          title={userDetail.name}
           titleVariant="titleLarge"
-          titleLarge
-          subtitle="twinkal@gmail.com"
+          subtitle={userDetail.email}
           left={LeftContent}
         />
         <Card.Content>
           <Text variant="titleLarge">
-            <Text style={styles.titleHead}>Mobile: </Text>6767677676
+            <Text style={styles.titleHead}>Mobile: </Text>
+            +91 {userDetail.contact_no}
           </Text>
           <Text variant="bodyMedium">
-            <Text style={styles.titleHead}>Address: </Text>Bhilwara, Rajasthan
+            <Text style={styles.titleHead}>Address: </Text>
+            {userDetail.address}
           </Text>
         </Card.Content>
         <Card.Actions>

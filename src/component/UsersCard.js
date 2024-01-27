@@ -24,7 +24,7 @@ const UsersCard = ({ item }) => {
           <Text style={styles.content}>Email:</Text> {item.email}
         </Text>
         <Text>
-          <Text style={styles.content}>Phone:</Text> {item.phone}
+          <Text style={styles.content}>Phone:</Text> {item.contact_no}
         </Text>
       </View>
     </Pressable>

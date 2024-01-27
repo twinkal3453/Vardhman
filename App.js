@@ -5,6 +5,7 @@ import {
 } from "react-native-paper";
 import ParentStackNavigator from "./src/ParentStackNavigator";
 import AuthenticateState from "./src/context/auth/AuthenticateState";
+import LoaderState from "./src/context/loader/LoaderState";
 
 const theme = {
   ...DefaultTheme,
@@ -20,9 +21,11 @@ const theme = {
 export default function App() {
   return (
     <AuthenticateState>
-      <PaperProvider theme={theme}>
-        <ParentStackNavigator />
-      </PaperProvider>
+      <LoaderState>
+        <PaperProvider theme={theme}>
+          <ParentStackNavigator />
+        </PaperProvider>
+      </LoaderState>
     </AuthenticateState>
   );
 }
