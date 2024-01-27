@@ -98,7 +98,7 @@ const ParentStackNavigator = () => {
                     color={color}
                   />
                 ),
-                // headerShown: false,
+                headerShown: false,
               }}
               name="Profile"
               component={Profile}
