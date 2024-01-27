@@ -22,7 +22,7 @@ const Users = () => {
             <View style={{ marginRight: 10 }}>
               <ActivityIndicator
                 animating={loader.loader}
-                color={MD2Colors.grey500}
+                color={MD2Colors.blue500}
               />
             </View>
           ),
