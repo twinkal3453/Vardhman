@@ -82,6 +82,10 @@ const ParentStackNavigator = () => {
                       color={color}
                     />
                   ),
+                  tabBarBadge: 4,
+                  tabBarBadgeStyle: {
+                    backgroundColor: "green",
+                  },
                   headerShown: false,
                 }}
                 name="Cart"
