@@ -57,7 +57,7 @@ const HomeDetail = ({ route }) => {
             Qty: {data.product_qty} * {count}
           </Text>
         </Card.Content>
-        {!auth.role === 1 && (
+        {auth.role === 0 && (
           <Card.Actions>
             <View style={styles.counter_parent}>
               <FAB

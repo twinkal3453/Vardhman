@@ -36,7 +36,7 @@ const ProfileDetail = () => {
       const userData = JSON.parse(await AsyncStorage.getItem("user"));
 
       const user = JSON.parse(userData);
-      console.log("LIne 30", user.userData);
+
       setuserDetail(user.userData);
     } catch (e) {
       // remove error
@@ -48,11 +48,6 @@ const ProfileDetail = () => {
       handleRouteAuth();
     }, [])
   );
-
-  //submitting the updated value to update the profile
-  const handleSubmit = () => {
-    console.log("Line 54 updating... the profile");
-  };
 
   return (
     <React.Fragment>
@@ -80,6 +75,10 @@ const ProfileDetail = () => {
             <Text variant="bodyMedium">
               <Text style={styles.titleHead}>Address: </Text>
               {userDetail.address}
+            </Text>
+            <Text variant="bodyMedium">
+              <Text style={styles.titleHead}>GST No: </Text>
+              {userDetail.gst_no}
             </Text>
           </Card.Content>
           <Card.Actions>
