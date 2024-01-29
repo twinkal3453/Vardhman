@@ -10,11 +10,12 @@ import {
 } from "react-native-paper";
 import { IMG } from "../../../backend";
 import AuthenticateContext from "../../context/auth/AuthenticateContext";
-
-const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import ProductContext from "../../context/product/ProductContext";
 
 const HomeDetail = ({ route }) => {
   const auth = useContext(AuthenticateContext);
+  const prodCount = useContext(ProductContext);
   const { data } = route.params;
   const [count, setCount] = useState(1);
 
@@ -32,6 +33,36 @@ const HomeDetail = ({ route }) => {
     const value = parseFloat(data) * count;
 
     return value + ".00";
+  };
+
+  const handleAdd = async () => {
+    const prodList = [];
+    try {
+      const prodData = await AsyncStorage.getItem("product");
+      const productList = JSON.parse(prodData);
+      data.qty = count;
+      prodList.push(data);
+
+      if (productList) {
+        for (let i = 0; i < productList.length; i++) {
+          console.log("Line 46>>>>>>>..", productList[i]);
+        }
+      }
+
+      if (productList) {
+        productList.splice(productList.length, 0, data);
+
+        console.log("Line 47 something", productList);
+        await AsyncStorage.setItem("product", JSON.stringify(prodList));
+      } else {
+        await AsyncStorage.setItem("product", JSON.stringify(prodList));
+        console.log("Line 50 nothing", prodList);
+      }
+
+      prodCount.handleProdUpdate(Date.now());
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -74,7 +105,7 @@ const HomeDetail = ({ route }) => {
                 onPress={() => handleCount("inc")}
               />
             </View>
-            <Button mode="outlined" icon="cart">
+            <Button onPress={handleAdd} mode="outlined" icon="cart">
               Add to cart
             </Button>
           </Card.Actions>

@@ -1,4 +1,3 @@
-import { Text, View } from "react-native";
 import LoaderContext from "./LoaderContext";
 import React, { useState } from "react";
 

@@ -17,6 +17,8 @@ import {
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
 import { isAuthenticated } from "./Helper/isAuthenticated";
+import ProductContext from "./context/product/ProductContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,6 +29,29 @@ const Authentication = () => {
 
 const ParentStackNavigator = () => {
   const data = useContext(AuthenticateContext);
+  const prodCount = useContext(ProductContext);
+  const [count, setCount] = useState(0);
+
+  // console.log("Line 35>>>", prodCount);
+
+  const handleCount = async (data) => {
+    // console.log("Line 34 data.", data);
+    try {
+      // await AsyncStorage.removeItem("product");
+      const data = await AsyncStorage.getItem("product");
+      // const productCount = JSON.parse(data);
+
+      // console.log("Line 41", data);
+
+      // setCount(productCount);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    handleCount(prodCount);
+  }, [prodCount.prodUpdate]);
 
   return (
     <React.Fragment>
@@ -82,7 +107,7 @@ const ParentStackNavigator = () => {
                       color={color}
                     />
                   ),
-                  tabBarBadge: 4,
+                  tabBarBadge: count && count,
                   tabBarBadgeStyle: {
                     backgroundColor: "green",
                   },
