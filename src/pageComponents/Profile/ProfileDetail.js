@@ -24,6 +24,7 @@ const ProfileDetail = () => {
     try {
       await AsyncStorage.removeItem("user");
       // Vibration.vibrate(500);
+      await AsyncStorage.removeItem("product");
       auth.changeRoute(false);
       auth.handleRole();
     } catch (e) {

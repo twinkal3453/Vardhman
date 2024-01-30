@@ -7,25 +7,15 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import { FontAwesome } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { IMG } from "../../backend";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useState } from "react";
 
-const ProductsCard = ({ changeColor, item }) => {
-  const navigation = useNavigation();
-
-  // handling managing single user.
-  const handleUser = (data) => {
-    navigation.navigate("Detail", {
-      data: data,
-    });
-  };
-
+const CartCard = ({ item, handleRemove }) => {
   return (
     <SafeAreaView style={styles.safe_view}>
-      <Pressable onPress={() => handleUser(item)} style={styles.list_card}>
+      <Pressable
+        onLongPress={() => handleRemove(item)}
+        style={styles.list_card}
+      >
         <View style={styles.img_section}>
           {/*<FontAwesome name="user" size={35} color="grey" />*/}
           <Image
@@ -40,16 +30,20 @@ const ProductsCard = ({ changeColor, item }) => {
             {item.product_name_eng}
           </Text>
           <Text>
-            <Text style={styles.content}>Price:</Text> {item.product_price}
+            <Text style={styles.content}>Price:</Text>{" "}
+            {item.product_price * item.qty}.00
           </Text>
           <Text>
-            <Text style={styles.content}>Qty:</Text> {item.product_qty}
+            <Text style={styles.content}>Qty:</Text> {item.product_qty} *{" "}
+            <Text>{item.qty}</Text>
           </Text>
         </View>
       </Pressable>
     </SafeAreaView>
   );
 };
+
+export default CartCard;
 
 const styles = StyleSheet.create({
   list_card: {
@@ -98,5 +92,3 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-
-export default ProductsCard;

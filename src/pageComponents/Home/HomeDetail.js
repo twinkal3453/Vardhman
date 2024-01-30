@@ -12,12 +12,35 @@ import { IMG } from "../../../backend";
 import AuthenticateContext from "../../context/auth/AuthenticateContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProductContext from "../../context/product/ProductContext";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 const HomeDetail = ({ route }) => {
+  const navigation = useNavigation();
   const auth = useContext(AuthenticateContext);
   const prodCount = useContext(ProductContext);
   const { data } = route.params;
   const [count, setCount] = useState(1);
+  const [addedToCart, setAddedToCart] = useState(false);
+
+  const getCartData = async () => {
+    try {
+      const prodData = JSON.parse(await AsyncStorage.getItem("product"));
+
+      const findProductFromCart =
+        prodData && prodData.find((item) => item.id === data.id);
+
+      if (findProductFromCart) {
+        setAddedToCart(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useFocusEffect(
+    React.useCallback(() => {
+      getCartData();
+    }, [])
+  );
 
   const handleCount = (data) => {
     if (data === "inc") {
@@ -36,27 +59,20 @@ const HomeDetail = ({ route }) => {
   };
 
   const handleAdd = async () => {
-    const prodList = [];
     try {
       const prodData = await AsyncStorage.getItem("product");
       const productList = JSON.parse(prodData);
       data.qty = count;
-      prodList.push(data);
 
       if (productList) {
-        for (let i = 0; i < productList.length; i++) {
-          console.log("Line 46>>>>>>>..", productList[i]);
-        }
-      }
-
-      if (productList) {
-        productList.splice(productList.length, 0, data);
-
-        console.log("Line 47 something", productList);
-        await AsyncStorage.setItem("product", JSON.stringify(prodList));
+        productList.push(data);
+        await AsyncStorage.setItem("product", JSON.stringify(productList));
+        setAddedToCart(true);
+        setTimeout(() => {
+          navigation.navigate("Home");
+        }, 500);
       } else {
-        await AsyncStorage.setItem("product", JSON.stringify(prodList));
-        console.log("Line 50 nothing", prodList);
+        await AsyncStorage.setItem("product", JSON.stringify([data]));
       }
 
       prodCount.handleProdUpdate(Date.now());
@@ -105,12 +121,24 @@ const HomeDetail = ({ route }) => {
                 onPress={() => handleCount("inc")}
               />
             </View>
-            <Button onPress={handleAdd} mode="outlined" icon="cart">
+            <Button
+              disabled={addedToCart}
+              onPress={handleAdd}
+              mode="outlined"
+              icon="cart"
+            >
               Add to cart
             </Button>
           </Card.Actions>
         )}
       </Card>
+      {addedToCart && (
+        <View style={styles.alert_card}>
+          <Text style={{ textAlign: "center", fontWeight: 500 }}>
+            Added to cart...
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -136,6 +164,12 @@ const styles = StyleSheet.create({
   },
   count_text: {
     marginHorizontal: 10,
+  },
+  alert_card: {
+    marginTop: 10,
+    backgroundColor: "#ffb8b8",
+    padding: 10,
+    borderRadius: 10,
   },
 });
 

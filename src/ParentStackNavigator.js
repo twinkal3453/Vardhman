@@ -39,11 +39,9 @@ const ParentStackNavigator = () => {
     try {
       // await AsyncStorage.removeItem("product");
       const data = await AsyncStorage.getItem("product");
-      // const productCount = JSON.parse(data);
+      const productCount = JSON.parse(data);
 
-      // console.log("Line 41", data);
-
-      // setCount(productCount);
+      setCount(productCount && productCount.length);
     } catch (error) {
       console.log(error);
     }
@@ -107,9 +105,10 @@ const ParentStackNavigator = () => {
                       color={color}
                     />
                   ),
+
                   tabBarBadge: count && count,
                   tabBarBadgeStyle: {
-                    backgroundColor: "green",
+                    backgroundColor: count ? "green" : "transparent",
                   },
                   headerShown: false,
                 }}
