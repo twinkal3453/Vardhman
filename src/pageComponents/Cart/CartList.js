@@ -5,16 +5,23 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import CartCard from "../../component/CartCard";
 import ProductContext from "../../context/product/ProductContext";
 import Toast from "react-native-toast-message";
+import axios from "axios";
+import { API } from "../../../backend";
+import { ActivityIndicator, MD2Colors } from "react-native-paper";
 
 const CartList = () => {
   const [prodData, setProdData] = useState([]);
   const prodCount = useContext(ProductContext);
+  const [isAdded, setIsAdded] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const getProductData = async () => {
     try {
       const data = await AsyncStorage.getItem("product");
+
       if (data) {
         const parsedData = JSON.parse(data);
+
         setProdData(parsedData);
       }
     } catch (error) {
@@ -27,8 +34,6 @@ const CartList = () => {
       getProductData();
     }, [])
   );
-
-  console.log("Line 27 Cart", prodData);
 
   const handleRemove = async (data) => {
     const filteredData = prodData.filter((item) => item.id !== data.id);
@@ -47,6 +52,69 @@ const CartList = () => {
     }
   };
 
+  // Remove the cart after placing the order
+  const removeCart = async () => {
+    try {
+      await AsyncStorage.removeItem("product");
+      setProdData([]);
+      prodCount.handleProdUpdate(Date.now());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlePlaceOrder = async () => {
+    setLoading(true);
+    try {
+      const userData = JSON.parse(await AsyncStorage.getItem("user"));
+      // Vibration.vibrate(500);
+      const user = JSON.parse(userData);
+
+      const submitProd = [];
+
+      for (let i in prodData) {
+        const data = {
+          product: prodData[i].id,
+          qty: prodData[i].qty,
+        };
+        submitProd.push(data);
+      }
+
+      const params = {
+        userId: user.userData.id,
+        productList: submitProd,
+      };
+
+      console.log("Line 70....", user.token);
+
+      axios
+        .post(`${API()}/generate_orders`, params, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            console.log("Line 81", response.data);
+            setIsAdded(true);
+            setLoading(false);
+
+            setTimeout(() => {
+              removeCart();
+              setIsAdded(false);
+            }, 1000);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.main_component}>
       <FlatList
@@ -56,22 +124,50 @@ const CartList = () => {
         )}
         keyExtractor={(item) => item.id}
       />
-      <Pressable
-        onPress={() => console.log("Placing the order...")}
-        style={styles.Order_button}
-      >
-        <Text style={{ color: "white", textAlign: "center" }}>Place Order</Text>
-      </Pressable>
+      {isAdded && (
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "600",
+            textAlign: "center",
+            marginVertical: 5,
+          }}
+        >
+          Order is Placed.
+        </Text>
+      )}
+      {prodData.length > 0 && (
+        <Pressable
+          disabled={loading}
+          onPress={handlePlaceOrder}
+          style={styles.Order_button}
+        >
+          {!loading ? (
+            <Text
+              style={{
+                color: "white",
+                textAlign: "center",
+                fontSize: 17,
+                marginVertical: 2,
+              }}
+            >
+              Place Order
+            </Text>
+          ) : (
+            <ActivityIndicator animating={true} color={MD2Colors.white} />
+          )}
+        </Pressable>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   Order_button: {
-    padding: 10,
+    padding: 12,
     backgroundColor: "#29ba54",
     borderRadius: 10,
-    marginVertical: 10,
+    marginVertical: 8,
     marginHorizontal: 5,
   },
   main_component: {
