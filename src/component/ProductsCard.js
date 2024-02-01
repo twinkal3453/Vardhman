@@ -11,9 +11,8 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { IMG } from "../../backend";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useState } from "react";
 
-const ProductsCard = ({ changeColor, item }) => {
+const ProductsCard = ({ item }) => {
   const navigation = useNavigation();
 
   // handling managing single user.

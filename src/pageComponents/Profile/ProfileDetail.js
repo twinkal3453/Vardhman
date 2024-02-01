@@ -50,6 +50,8 @@ const ProfileDetail = () => {
     }, [])
   );
 
+  console.log("Line 54....>>", userDetail.role);
+
   return (
     <React.Fragment>
       <View style={styles.MainComponent}>
@@ -82,19 +84,18 @@ const ProfileDetail = () => {
               {userDetail.gst_no}
             </Text>
           </Card.Content>
-          <View style={{ paddingHorizontal: 10, marginTop: 20 }}>
-            <Button
-              mode="outlined"
-              onPress={() => navigation.navigate("Orders")}
-            >
-              View Orders
-            </Button>
-          </View>
+          {userDetail.role !== "1" && (
+            <View style={{ paddingHorizontal: 10, marginTop: 20 }}>
+              <Button
+                mode="outlined"
+                onPress={() => navigation.navigate("Orders")}
+              >
+                View Orders
+              </Button>
+            </View>
+          )}
           <Card.Actions>
-            <Pressable
-              style={styles.pressable}
-              onPress={() => console.log("hello")}
-            >
+            <Pressable style={styles.pressable} onPress={handleLogout}>
               <Text style={styles.pressText}>Log out</Text>
             </Pressable>
           </Card.Actions>

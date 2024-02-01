@@ -4,7 +4,7 @@ import React from "react";
 const OrderDetail = () => {
   return (
     <View style={styles.detail_component}>
-      <Text>OrderDetail</Text>
+      <Text>OrderDetail Coming soon.</Text>
     </View>
   );
 };
