@@ -19,7 +19,6 @@ import formatDate from "../../Helper/utility";
 const LeftContent = (props) => <Avatar.Icon {...props} icon="progress-clock" />;
 
 const OrderCardAdmin = ({ item }) => {
-  console.log("Line 5", item);
   const navigation = useNavigation();
 
   const handleOrderDetai = (data) => {
@@ -92,6 +91,8 @@ const OrderList = () => {
       handleGetOrder();
     }, [])
   );
+
+  console.log("Line 95 Order data>>>", orderData);
 
   return (
     <SafeAreaView style={styles.safe_view}>
