@@ -7,6 +7,7 @@ import ParentStackNavigator from "./src/ParentStackNavigator";
 import AuthenticateState from "./src/context/auth/AuthenticateState";
 import LoaderState from "./src/context/loader/LoaderState";
 import ProductState from "./src/context/product/ProductState";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 const theme = {
   ...DefaultTheme,
@@ -22,13 +23,15 @@ const theme = {
 export default function App() {
   return (
     <AuthenticateState>
-      <LoaderState>
-        <ProductState>
-          <PaperProvider theme={theme}>
-            <ParentStackNavigator />
-          </PaperProvider>
-        </ProductState>
-      </LoaderState>
+      <RootSiblingParent>
+        <LoaderState>
+          <ProductState>
+            <PaperProvider theme={theme}>
+              <ParentStackNavigator />
+            </PaperProvider>
+          </ProductState>
+        </LoaderState>
+      </RootSiblingParent>
     </AuthenticateState>
   );
 }

@@ -17,8 +17,10 @@ import AuthenticateContext from "../context/auth/AuthenticateContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { API } from "../../backend";
+import useToast from "../customHook/useToast";
 
 const Login = () => {
+  const showToast = useToast();
   const auth = useContext(AuthenticateContext);
   const creds = {
     email: "",
@@ -60,6 +62,7 @@ const Login = () => {
         })
         .then((response) => {
           if (response.status === 200) {
+            showToast("Logged in Successfully");
             const resData = response.data;
             auth.handleRole(parseInt(resData.userData.role));
             const data = JSON.stringify(resData);

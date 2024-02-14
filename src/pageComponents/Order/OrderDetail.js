@@ -9,10 +9,20 @@ import {
   Pressable,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { Avatar, Button, Card } from "react-native-paper";
+import {
+  Avatar,
+  Button,
+  Card,
+  ActivityIndicator,
+  MD2Colors,
+} from "react-native-paper";
 import { IMG, API } from "../../../backend";
 import { Checkbox } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-root-toast";
+import useToast from "../../customHook/useToast";
 
 const Item = ({ item, handlePressed }) => {
   return (
@@ -81,14 +91,16 @@ const Item = ({ item, handlePressed }) => {
 };
 
 const OrderDetail = ({ route }) => {
-  const { data } = route.params;
+  const showToast = useToast();
+  const navigation = useNavigation();
+  const { data, orderId } = route.params;
   const [orderListData, setOrderListData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setOrderListData(data);
+    const dataValue = data.sort((a, b) => a.id - b.id);
+    setOrderListData(dataValue);
   }, [data]);
-
-  console.log("Line 12>>> order", orderListData);
 
   const handlePressed = (data) => {
     const stateValue = [...orderListData];
@@ -109,6 +121,7 @@ const OrderDetail = ({ route }) => {
   };
 
   const handleConfirm = async () => {
+    setLoading(true);
     const confirmedParams = [];
 
     for (let i in orderListData) {
@@ -121,31 +134,35 @@ const OrderDetail = ({ route }) => {
       orderList: confirmedParams,
     };
 
-    console.log("Line 112 confirmed", finalParams);
+    try {
+      const userData = JSON.parse(await AsyncStorage.getItem("user"));
+      const user = JSON.parse(userData);
 
-    // try {
-    //   const userData = JSON.parse(await AsyncStorage.getItem("user"));
-    //   const user = JSON.parse(userData);
-    //   axios
-    //     .post(`${API()}/update_orders/${user.userData.id}`, finalParams, {
-    //       headers: {
-    //         Accept: "application/json",
-    //         "Content-Type": "application/json",
-    //         Authorization: `Bearer ${user.token}`,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       if (response.status === 200) {
-    //         setOrderData(response.data);
-    //         setRefreshing(false);
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       console.log("Line: 24", error);
-    //     });
-    // } catch (e) {
-    //   // remove error
-    // }
+      axios
+        .post(`${API()}/update_orders/${orderId}`, finalParams, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            showToast("Order successfully updated...");
+            setLoading(false);
+            setTimeout(() => {
+              navigation.navigate("Order List");
+            }, 500);
+          }
+        })
+        .catch((error) => {
+          console.log("Line: 24", error);
+          setLoading(false);
+        });
+    } catch (e) {
+      // remove error
+      setLoading(false);
+    }
   };
 
   return (
@@ -157,8 +174,16 @@ const OrderDetail = ({ route }) => {
         )}
         keyExtractor={(item) => item.id}
       />
-      <Pressable onPress={handleConfirm} style={styles.order_confirm}>
-        <Text style={styles.order_confirm_text}>Confirm</Text>
+      <Pressable
+        disabled={loading}
+        onPress={handleConfirm}
+        style={styles.order_confirm}
+      >
+        {loading ? (
+          <ActivityIndicator animating={loading} color={MD2Colors.white} />
+        ) : (
+          <Text style={styles.order_confirm_text}>Confirm</Text>
+        )}
       </Pressable>
     </View>
   );
@@ -224,7 +249,7 @@ const styles = StyleSheet.create({
   order_confirm_text: {
     color: "white",
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 20,
   },
 });
 

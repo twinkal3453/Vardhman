@@ -23,16 +23,14 @@ const OrderCardAdmin = ({ item }) => {
 
   const handleOrderDetai = (data) => {
     navigation.navigate("Order Detail", {
-      data: data,
+      data: data.orderList,
+      orderId: data.id,
     });
   };
 
   return (
     <SafeAreaView>
-      <Card
-        onPress={() => handleOrderDetai(item.orderList)}
-        style={styles.list_card}
-      >
+      <Card onPress={() => handleOrderDetai(item)} style={styles.list_card}>
         <Card.Title
           title={`${item.customer_name}`}
           titleVariant="titleLarge"
@@ -91,8 +89,6 @@ const OrderList = () => {
       handleGetOrder();
     }, [])
   );
-
-  console.log("Line 95 Order data>>>", orderData);
 
   return (
     <SafeAreaView style={styles.safe_view}>

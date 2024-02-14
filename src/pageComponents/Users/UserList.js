@@ -72,6 +72,7 @@ const UserList = () => {
 const styles = StyleSheet.create({
   main_component: {
     padding: 2,
+    flex: 1,
   },
 });
 

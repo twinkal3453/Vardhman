@@ -64,9 +64,9 @@ const OrderDetail = ({ route }) => {
   const { data } = route.params;
 
   return (
-    <View style={{ padding: 2 }}>
+    <View style={{ padding: 2, flex: 1 }}>
       <FlatList
-        data={data}
+        data={data.sort((a, b) => a.id - b.id)}
         renderItem={({ item }) => <OrderListCard item={item} />}
         keyExtractor={(item) => item.id}
       />
