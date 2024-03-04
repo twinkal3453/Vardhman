@@ -30,7 +30,7 @@ const Item = ({ item, handlePressed }) => {
       <Pressable onPress={() => handlePressed(item)}>
         <View
           style={{
-            backgroundColor: item.status === "1" ? "#e3ffe3" : "#ffe6e6",
+            backgroundColor: item.status === "Approved" ? "#e3ffe3" : "#ffe6e6",
             borderRadius: 5,
             padding: 8,
             margin: 5,
@@ -48,7 +48,7 @@ const Item = ({ item, handlePressed }) => {
             flexDirection: "row",
             alignItems: "center",
             borderWidth: 1,
-            borderColor: item.status === "1" ? "green" : "#ffabab",
+            borderColor: item.status === "Approved" ? "green" : "#ffabab",
           }}
         >
           <View style={styles.img_section}>
@@ -80,7 +80,7 @@ const Item = ({ item, handlePressed }) => {
                 </Text>
               </View>
               <Checkbox
-                status={item.status === "1" ? "checked" : "unchecked"}
+                status={item.status === "Approved" ? "checked" : "unchecked"}
               />
             </View>
           </View>
@@ -93,31 +93,33 @@ const Item = ({ item, handlePressed }) => {
 const OrderDetail = ({ route }) => {
   const showToast = useToast();
   const navigation = useNavigation();
-  const { data, orderId } = route.params;
+  const { data, orderId, orderStatus } = route.params;
   const [orderListData, setOrderListData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const dataValue = data.sort((a, b) => a.id - b.id);
+    console.log("Line 102", dataValue, orderStatus);
     setOrderListData(dataValue);
   }, [data]);
 
   const handlePressed = (data) => {
     const stateValue = [...orderListData];
-
-    if (data.status === "0") {
-      data.status = "1";
-    } else {
-      data.status = "0";
-    }
-
-    for (let i in stateValue) {
-      if (stateValue[i].id === data.id) {
-        stateValue.splice(i, 1, data);
+    if (orderStatus !== "Approved") {
+      if (data.status === "Pending") {
+        data.status = "Approved";
+      } else {
+        data.status = "Pending";
       }
-    }
 
-    setOrderListData(stateValue);
+      for (let i in stateValue) {
+        if (stateValue[i].id === data.id) {
+          stateValue.splice(i, 1, data);
+        }
+      }
+
+      setOrderListData(stateValue);
+    }
   };
 
   const handleConfirm = async () => {
@@ -125,7 +127,7 @@ const OrderDetail = ({ route }) => {
     const confirmedParams = [];
 
     for (let i in orderListData) {
-      if (orderListData[i].status === "1") {
+      if (orderListData[i].status === "Approved") {
         confirmedParams.push(orderListData[i].id);
       }
     }

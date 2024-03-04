@@ -7,7 +7,6 @@ import {
   SafeAreaView,
 } from "react-native";
 import React from "react";
-import { Avatar, Button, Card } from "react-native-paper";
 import { IMG } from "../../../backend";
 
 const OrderListCard = ({ item }) => {
@@ -15,7 +14,7 @@ const OrderListCard = ({ item }) => {
     <SafeAreaView style={styles.safe_view}>
       <View
         style={{
-          backgroundColor: item.status === "1" ? "#e3ffe3" : "#ffe6e6",
+          backgroundColor: item.status === "Approved" ? "#e3ffe3" : "#ffe6e6",
           borderRadius: 5,
           padding: 8,
           margin: 5,
@@ -33,7 +32,7 @@ const OrderListCard = ({ item }) => {
           flexDirection: "row",
           alignItems: "center",
           borderWidth: 1,
-          borderColor: item.status === "1" ? "green" : "#ffabab",
+          borderColor: item.status === "Approved" ? "green" : "#ffabab",
         }}
       >
         <View style={styles.img_section}>

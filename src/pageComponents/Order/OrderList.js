@@ -25,6 +25,7 @@ const OrderCardAdmin = ({ item }) => {
     navigation.navigate("Order Detail", {
       data: data.orderList,
       orderId: data.id,
+      orderStatus: data.status,
     });
   };
 
@@ -67,6 +68,7 @@ const OrderList = () => {
         .then((response) => {
           if (response.status === 200) {
             setOrderData(response.data);
+            console.log("Line 70", response.data);
             setRefreshing(false);
           }
         })
