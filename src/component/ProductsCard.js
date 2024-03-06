@@ -6,20 +6,31 @@ import {
   SafeAreaView,
   Image,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { IMG } from "../../backend";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import LanguageContext from "../context/Language/LanguageContext";
 
 const ProductsCard = ({ item }) => {
   const navigation = useNavigation();
+  const { language } = useContext(LanguageContext);
 
   // handling managing single user.
   const handleUser = (data) => {
     navigation.navigate("Detail", {
       data: data,
     });
+  };
+
+  const getItemName = () => {
+    const getLanguage = {
+      english: item.product_name_eng,
+      hindi: item.product_name_hin,
+      gujrati: item.product_name_guj,
+    };
+    return getLanguage[language];
   };
 
   return (
@@ -36,7 +47,7 @@ const ProductsCard = ({ item }) => {
         </View>
         <View style={styles.content_section}>
           <Text numberOfLines={3} style={styles.textName}>
-            {item.product_name_eng}
+            {getItemName()}
           </Text>
           <Text>
             <Text style={styles.content}>Price:</Text> {item.product_price}

@@ -14,7 +14,6 @@ import { ApiTokenHeader } from "../../Helper/ApiTokenHeader";
 import { API } from "../../../backend";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Searchbar } from "react-native-paper";
-
 const HomeList = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [refreshing, setRefreshing] = useState(false);

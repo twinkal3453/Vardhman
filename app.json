@@ -14,21 +14,19 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true,
-      "permissions": [
-        "VIBRATE"
-      ]
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "permissions": [
-          "VIBRATE"
-        ]
+        "backgroundColor": "#ffffff"
       },
+      "permissions": ["INTERNET"],
       "package": "com.twinkal_raj.Vardhman"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "permissions": [
+        "NSAppTransportSecurity"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

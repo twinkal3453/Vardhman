@@ -7,6 +7,7 @@ const UsersCard = ({ item }) => {
   const navigation = useNavigation();
   // handling managing single user.
   const handleUser = (data) => {
+    console.log("Line 11", data);
     navigation.navigate("User Detail", {
       data: data,
     });
@@ -25,6 +26,17 @@ const UsersCard = ({ item }) => {
         </Text>
         <Text>
           <Text style={styles.content}>Phone:</Text> {item.contact_no}
+        </Text>
+      </View>
+      <View
+        style={
+          item.is_approved === "1"
+            ? styles.user_label
+            : styles.user_reject_label
+        }
+      >
+        <Text style={{ color: "white" }}>
+          {item.is_approved === "1" ? "Active" : "Inactive"}
         </Text>
       </View>
     </Pressable>
@@ -50,6 +62,30 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    position: "relative",
+    // overflow: "hidden",
+  },
+  user_label: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    backgroundColor: "#83de8f",
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    padding: 5,
+  },
+  user_reject_label: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    backgroundColor: "#de8383",
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    padding: 5,
   },
   img_section: {
     marginRight: 10,
