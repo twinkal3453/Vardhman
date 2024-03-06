@@ -7,7 +7,6 @@ import {
   Image,
 } from "react-native";
 import React, { useContext } from "react";
-import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { IMG } from "../../backend";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -37,7 +36,6 @@ const ProductsCard = ({ item }) => {
     <SafeAreaView style={styles.safe_view}>
       <Pressable onPress={() => handleUser(item)} style={styles.list_card}>
         <View style={styles.img_section}>
-          {/*<FontAwesome name="user" size={35} color="grey" />*/}
           <Image
             style={styles.prodImage}
             source={{

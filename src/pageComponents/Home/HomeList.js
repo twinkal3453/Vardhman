@@ -10,7 +10,6 @@ import React, { useCallback, useState } from "react";
 import ProductsCard from "../../component/ProductsCard";
 import { useFocusEffect } from "@react-navigation/native";
 import axios from "axios";
-import { ApiTokenHeader } from "../../Helper/ApiTokenHeader";
 import { API } from "../../../backend";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Searchbar } from "react-native-paper";

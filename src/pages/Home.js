@@ -2,7 +2,7 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeList from "../pageComponents/Home/HomeList";
 import HomeDetail from "../pageComponents/Home/HomeDetail";
-import { View, Text, Pressable } from "react-native";
+import { Pressable } from "react-native";
 import { Icon, MD3Colors } from "react-native-paper";
 
 const Stack = createNativeStackNavigator();
