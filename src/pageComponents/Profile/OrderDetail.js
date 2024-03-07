@@ -6,10 +6,13 @@ import {
   Image,
   SafeAreaView,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { IMG } from "../../../backend";
+import LanguageContext from "../../context/Language/LanguageContext";
 
 const OrderListCard = ({ item }) => {
+  const { language } = useContext(LanguageContext);
+
   return (
     <SafeAreaView style={styles.safe_view}>
       <View

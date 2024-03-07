@@ -15,6 +15,7 @@ import {
 import { Avatar, Card } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import formatDate from "../../Helper/utility";
+import { Chip } from "react-native-paper";
 
 const LeftContent = (props) => <Avatar.Icon {...props} icon="progress-clock" />;
 
@@ -40,6 +41,19 @@ const OrderCardAdmin = ({ item }) => {
           left={LeftContent}
         />
         <Card.Content>
+          <View style={{ width: 150, marginBottom: 5 }}>
+            <Chip
+              selectedColor={item.status === "Pending" ? "red" : "green"}
+              mode="outlined"
+              icon={item.status === "Pending" ? "clock-alert-outline" : "check"}
+            >
+              {item.status}
+            </Chip>
+          </View>
+          <Text
+            style={{ marginBottom: 5, fontSize: 17, fontWeight: "500" }}
+            variant="titleLarge"
+          >{`Order Id: ${item.id}`}</Text>
           <Text variant="titleLarge">{`Date: ${formatDate(
             item.created_at
           )}`}</Text>

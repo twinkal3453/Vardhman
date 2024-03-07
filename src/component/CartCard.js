@@ -6,10 +6,22 @@ import {
   SafeAreaView,
   Image,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { IMG } from "../../backend";
+import LanguageContext from "../context/Language/LanguageContext";
 
 const CartCard = ({ item, handleRemove }) => {
+  const { language } = useContext(LanguageContext);
+
+  const getItemName = () => {
+    const getLanguage = {
+      english: item.product_name_eng,
+      hindi: item.product_name_hin,
+      gujrati: item.product_name_guj,
+    };
+    return getLanguage[language];
+  };
+
   return (
     <SafeAreaView style={styles.safe_view}>
       <Pressable
@@ -27,7 +39,7 @@ const CartCard = ({ item, handleRemove }) => {
         </View>
         <View style={styles.content_section}>
           <Text numberOfLines={3} style={styles.textName}>
-            {item.product_name_eng}
+            {getItemName()}
           </Text>
           <Text>
             <Text style={styles.content}>Price:</Text>{" "}
