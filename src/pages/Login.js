@@ -54,8 +54,6 @@ const Login = () => {
         password: password,
       };
 
-      console.log("Line 57", `${API()}/user_login`);
-
       axios
         .post(`${API()}/user_login`, data, {
           Headers: {
@@ -68,6 +66,7 @@ const Login = () => {
             const resData = response.data;
             auth.handleRole(parseInt(resData.userData.role));
             const data = JSON.stringify(resData);
+            console.log("Login token", resData);
             storeData(data);
           }
         })

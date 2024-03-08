@@ -25,24 +25,29 @@ import AuthenticateContext from "../../context/auth/AuthenticateContext";
 
 const inputForm = [
   {
-    type: "Name",
+    name: "Name",
     value: "name",
+    type: "singleline",
   },
   {
-    type: "Email",
+    name: "Email",
     value: "email",
+    type: "singleline",
   },
   {
-    type: "Phone",
+    name: "Phone",
     value: "phone",
+    type: "singleline",
   },
   {
-    type: "Address",
+    name: "Address",
     value: "address",
+    type: "multiline",
   },
   {
-    type: "GST No",
+    name: "GST No",
     value: "gst_no",
+    type: "singleline",
   },
 ];
 
@@ -135,9 +140,10 @@ const UpdateProfile = ({ route }) => {
               {inputForm.map((item, index) => {
                 return (
                   <TextInput
+                    multiline={item.type === "multiline" ? true : false}
                     key={index}
                     style={styles.inputField}
-                    label={item.type}
+                    label={item.name}
                     mode="outlined"
                     value={inputValues[item.value]}
                     onChangeText={handleChange(item.value)}
