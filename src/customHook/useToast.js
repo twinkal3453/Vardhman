@@ -2,10 +2,10 @@ import React from "react";
 import Toast from "react-native-root-toast";
 
 const useToast = () => {
-  const showToast = (value) => {
+  const showToast = (value, pos = "BOTTOM") => {
     Toast.show(value, {
       duration: Toast.durations.SHORT,
-      position: Toast.positions.BOTTOM,
+      position: Toast.positions[pos],
       shadow: true,
       animation: true,
       hideOnPress: true,

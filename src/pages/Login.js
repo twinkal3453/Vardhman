@@ -71,7 +71,8 @@ const Login = () => {
           }
         })
         .catch((error) => {
-          console.log("Line 50", error);
+          console.log("Line 50", error.response.data);
+          showToast(error && error.response.data.message, "TOP");
         });
     }
   };
