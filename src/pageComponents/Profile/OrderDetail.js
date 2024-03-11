@@ -13,6 +13,17 @@ import LanguageContext from "../../context/Language/LanguageContext";
 const OrderListCard = ({ item }) => {
   const { language } = useContext(LanguageContext);
 
+  console.log("Line 16>>>>", language, item);
+
+  const handleName = () => {
+    const returnName = {
+      hindi: item.product_name_hin,
+      english: item.product_name_eng,
+      gujrati: item.product_name_guj,
+    };
+    return returnName[language];
+  };
+
   return (
     <SafeAreaView style={styles.safe_view}>
       <View
@@ -48,10 +59,13 @@ const OrderListCard = ({ item }) => {
         </View>
         <View style={styles.content_section}>
           <Text numberOfLines={3} style={styles.textName}>
-            {item.product}
+            {handleName()}
           </Text>
           <Text>
             <Text style={styles.content}>Price:</Text> {item.amount}
+          </Text>
+          <Text>
+            <Text style={styles.content}>Grand Total:</Text> {item.grand_total}
           </Text>
           <Text>
             <Text style={styles.content}>Qty:</Text> {item.qty}

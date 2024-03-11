@@ -8,13 +8,15 @@ import {
   Image,
   Pressable,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Avatar,
   Button,
   Card,
   ActivityIndicator,
   MD2Colors,
+  MD3Colors,
+  Icon,
 } from "react-native-paper";
 import { IMG, API } from "../../../backend";
 import { Checkbox } from "react-native-paper";
@@ -23,8 +25,20 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-root-toast";
 import useToast from "../../customHook/useToast";
+import LanguageContext from "../../context/Language/LanguageContext";
 
 const Item = ({ item, handlePressed }) => {
+  const { language } = useContext(LanguageContext);
+
+  const handleName = () => {
+    const returnName = {
+      hindi: item.product_name_hin,
+      english: item.product_name_eng,
+      gujrati: item.product_name_guj,
+    };
+    return returnName[language];
+  };
+
   return (
     <SafeAreaView>
       <Pressable onPress={() => handlePressed(item)}>
@@ -61,7 +75,7 @@ const Item = ({ item, handlePressed }) => {
           </View>
           <View style={styles.content_section}>
             <Text numberOfLines={3} style={styles.textName}>
-              {item.product}
+              {handleName()}
             </Text>
             <View
               style={{
@@ -79,8 +93,10 @@ const Item = ({ item, handlePressed }) => {
                   <Text style={styles.content}>Qty:</Text> {item.qty}
                 </Text>
               </View>
-              <Checkbox
-                status={item.status === "Approved" ? "checked" : "unchecked"}
+              <Icon
+                source={item.status === "Approved" ? "check" : "exclamation"}
+                color={item.status === "Approved" ? "green" : MD3Colors.error50}
+                size={25}
               />
             </View>
           </View>
@@ -99,7 +115,6 @@ const OrderDetail = ({ route }) => {
 
   useEffect(() => {
     const dataValue = data.sort((a, b) => a.id - b.id);
-    console.log("Line 102", dataValue, orderStatus);
     setOrderListData(dataValue);
   }, [data]);
 
