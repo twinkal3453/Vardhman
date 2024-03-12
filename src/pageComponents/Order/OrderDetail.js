@@ -191,17 +191,19 @@ const OrderDetail = ({ route }) => {
         )}
         keyExtractor={(item) => item.id}
       />
-      <Pressable
-        disabled={loading}
-        onPress={handleConfirm}
-        style={styles.order_confirm}
-      >
-        {loading ? (
-          <ActivityIndicator animating={loading} color={MD2Colors.white} />
-        ) : (
-          <Text style={styles.order_confirm_text}>Confirm</Text>
-        )}
-      </Pressable>
+      {orderStatus !== "Approved" && (
+        <Pressable
+          disabled={loading}
+          onPress={handleConfirm}
+          style={styles.order_confirm}
+        >
+          {loading ? (
+            <ActivityIndicator animating={loading} color={MD2Colors.white} />
+          ) : (
+            <Text style={styles.order_confirm_text}>Confirm</Text>
+          )}
+        </Pressable>
+      )}
     </View>
   );
 };

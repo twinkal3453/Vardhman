@@ -50,8 +50,6 @@ const ProfileDetail = () => {
     }, [])
   );
 
-  console.log("Line 54....>>", userDetail.role);
-
   return (
     <React.Fragment>
       <View style={styles.MainComponent}>
