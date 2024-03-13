@@ -12,42 +12,19 @@ import {
   Keyboard,
   Image,
 } from "react-native";
-import React, { useState, useEffect, useContext } from "react";
-import { Snackbar, TextInput } from "react-native-paper";
+import React, { useState, useContext } from "react";
+import { TextInput } from "react-native-paper";
 import AuthenticateContext from "../context/auth/AuthenticateContext";
 import validator from "validator";
 import { Icon } from "react-native-paper";
 import axios from "axios";
 import { API } from "../../backend";
-
-const DisplayError = (props) => {
-  return (
-    props.message.error && (
-      <View style={styles.message}>
-        <Text style={styles.messageText}>{props.message.message}</Text>
-        <Text onPress={() => props.handleCloseMessage()}>
-          <Icon source="close" size={25} color="black" />
-        </Text>
-      </View>
-    )
-  );
-};
-
-const DisplaySuccess = (props) => {
-  return (
-    props.message.success && (
-      <View style={styles.successMessage}>
-        <Text style={styles.messageText}>{props.message.message}</Text>
-        <Text onPress={() => props.handleCloseMessage()}>
-          <Icon source="close" size={25} color="black" />
-        </Text>
-      </View>
-    )
-  );
-};
+import useToast from "../customHook/useToast";
 
 const Register = () => {
+  const showToast = useToast();
   const auth = useContext(AuthenticateContext);
+  const [loading, setLoading] = useState(false);
   const value = {
     name: "",
     phone: "",
@@ -67,13 +44,6 @@ const Register = () => {
     setCreateUser({ ...createUser, [name]: value });
   };
 
-  const messageValue = {
-    message: "",
-    error: false,
-    success: false,
-  };
-  const [messageData, setMessageData] = useState(messageValue);
-
   const handleChangeIcon = (data) => {
     console.log(data);
     if (data === "password") {
@@ -88,12 +58,7 @@ const Register = () => {
   };
 
   const handleSubmit = () => {
-    setMessageData({
-      ...messageData,
-      message: "Loading...",
-      error: false,
-      success: true,
-    });
+    setLoading(true);
     const value = {
       name: name,
       contact_no: phone,
@@ -113,74 +78,47 @@ const Register = () => {
             email: "Email",
             password: "Password",
           };
-          console.log(`${data[i]} can't be empty`);
-          setMessageData({
-            ...messageData,
-            message: `${data[i]} can't be empty`,
-            error: true,
-            success: false,
-          });
+          console.log("Can not empty");
+          showToast(`${data[i]} can not be empty!`, "TOP");
+          setLoading(false);
           return;
         }
       }
     }
 
     if (!validator.isEmail(email)) {
-      console.log("Line 76 this is not proper email");
-      setMessageData({
-        ...messageData,
-        message: "This is not proper email",
-        error: true,
-        success: false,
-      });
+      showToast(`Please provide a proper email!`, "TOP");
+      setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
-      setMessageData({
-        ...messageData,
-        message: "Both password should be same.",
-        error: true,
-        success: false,
-      });
+      showToast(`Both password should be the same!`, "TOP");
+      setLoading(false);
       return;
     }
 
-    console.log("Line 124 ready to submit", value);
-
     // Initiating api calls when all conditions passed.
     axios
-      .post(`${API()}/user_register`, value, {
+      .post(`${API()}/user_register`, JSON.stringify(value), {
         Headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
       })
       .then((response) => {
         if (response.status === 200) {
-          setMessageData({
-            ...messageData,
-            message: response.data.message,
-            error: false,
-            success: true,
-          });
+          showToast(response.data.message, "TOP");
           setTimeout(() => {
             handleAccount();
           }, 3000);
         }
       })
       .catch((error) => {
-        setMessageData({
-          ...messageData,
-          message: "User Exist",
-          error: true,
-          success: false,
-        });
         console.log("Line 50", error);
+        showToast("User Already exist!", "TOP");
+        setLoading(false);
       });
-  };
-
-  const handleCloseMessage = () => {
-    setMessageData(messageValue);
   };
 
   return (
@@ -268,17 +206,17 @@ const Register = () => {
                   </Text>
                 </Text>
               </View>
-              <Pressable style={styles.pressable} onPress={handleSubmit}>
-                <Text style={styles.pressText}>Sign Up</Text>
+              <Pressable
+                disabled={loading}
+                style={styles.pressable}
+                onPress={handleSubmit}
+              >
+                {loading ? (
+                  <Text style={styles.pressText}>Loading...</Text>
+                ) : (
+                  <Text style={styles.pressText}>Sign Up</Text>
+                )}
               </Pressable>
-              <DisplayError
-                message={messageData}
-                handleCloseMessage={handleCloseMessage}
-              />
-              <DisplaySuccess
-                message={messageData}
-                handleCloseMessage={handleCloseMessage}
-              />
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

@@ -20,6 +20,7 @@ import { API } from "../../backend";
 import useToast from "../customHook/useToast";
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const showToast = useToast();
   const auth = useContext(AuthenticateContext);
   const creds = {
@@ -47,6 +48,7 @@ const Login = () => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     if (email && password) {
       const data = {
         firebase_token: "",
@@ -62,6 +64,7 @@ const Login = () => {
         })
         .then((response) => {
           if (response.status === 200) {
+            setLoading(false);
             showToast("Logged in Successfully");
             const resData = response.data;
             auth.handleRole(parseInt(resData.userData.role));
@@ -72,6 +75,7 @@ const Login = () => {
         })
         .catch((error) => {
           console.log("Line 50", error.response.data);
+          setLoading(false);
           showToast(error && error.response.data.message, "TOP");
         });
     }
@@ -136,8 +140,16 @@ const Login = () => {
                 </Text>
               </Text>
             </View>
-            <Pressable style={styles.pressable} onPress={handleSubmit}>
-              <Text style={styles.pressText}>Sign In</Text>
+            <Pressable
+              disabled={loading}
+              style={styles.pressable}
+              onPress={handleSubmit}
+            >
+              {loading ? (
+                <Text style={styles.pressText}>Loading...</Text>
+              ) : (
+                <Text style={styles.pressText}>Sign In</Text>
+              )}
             </Pressable>
           </View>
         </KeyboardAvoidingView>
