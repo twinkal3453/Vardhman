@@ -48,8 +48,8 @@ const Login = () => {
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
     if (email && password) {
+      setLoading(true);
       const data = {
         firebase_token: "",
         username: email.toLowerCase(),
