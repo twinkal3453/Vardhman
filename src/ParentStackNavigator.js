@@ -22,12 +22,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 
-const Authentication = () => {
+const Authentication = ({ expoPushToken }) => {
   const auth = useContext(AuthenticateContext);
-  return auth.signUp ? <Register /> : <Login />;
+  return auth.signUp ? (
+    <Register expoPushToken={expoPushToken} />
+  ) : (
+    <Login expoPushToken={expoPushToken} />
+  );
 };
 
-const ParentStackNavigator = () => {
+const ParentStackNavigator = ({ expoPushToken }) => {
   const data = useContext(AuthenticateContext);
   const prodCount = useContext(ProductContext);
   const [count, setCount] = useState(0);
@@ -54,7 +58,7 @@ const ParentStackNavigator = () => {
   return (
     <React.Fragment>
       {!data.initialRoute ? (
-        <Authentication />
+        <Authentication expoPushToken={expoPushToken} />
       ) : (
         <NavigationContainer>
           <Tab.Navigator>

@@ -80,7 +80,6 @@ async function registerForPushNotificationsAsync() {
     token = await Notifications.getExpoPushTokenAsync({
       projectId: Constants.expoConfig.extra.eas.projectId,
     });
-    console.log("token>>>", token);
   } else {
     alert("Must use physical device for Push Notifications");
   }
@@ -124,7 +123,7 @@ export default function App() {
           <LoaderState>
             <ProductState>
               <PaperProvider theme={theme}>
-                <ParentStackNavigator />
+                <ParentStackNavigator expoPushToken={expoPushToken} />
               </PaperProvider>
             </ProductState>
           </LoaderState>

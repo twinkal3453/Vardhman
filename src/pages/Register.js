@@ -21,7 +21,7 @@ import axios from "axios";
 import { API } from "../../backend";
 import useToast from "../customHook/useToast";
 
-const Register = () => {
+const Register = ({ expoPushToken }) => {
   const showToast = useToast();
   const auth = useContext(AuthenticateContext);
   const [loading, setLoading] = useState(false);
@@ -45,7 +45,6 @@ const Register = () => {
   };
 
   const handleChangeIcon = (data) => {
-    console.log(data);
     if (data === "password") {
       setVisible({ ...visible, passwordV: passwordV ? false : true });
     } else {
@@ -57,6 +56,8 @@ const Register = () => {
     auth.handleAuth(false);
   };
 
+  console.log("Line 59 Register", expoPushToken);
+
   const handleSubmit = () => {
     setLoading(true);
     const value = {
@@ -65,7 +66,7 @@ const Register = () => {
       address: address,
       email: email.toLowerCase(),
       password: password,
-      firebase_token: "",
+      firebase_token: expoPushToken,
     };
 
     for (i in value) {

@@ -19,7 +19,7 @@ import axios from "axios";
 import { API } from "../../backend";
 import useToast from "../customHook/useToast";
 
-const Login = () => {
+const Login = ({ expoPushToken }) => {
   const [loading, setLoading] = useState(false);
   const showToast = useToast();
   const auth = useContext(AuthenticateContext);
@@ -47,11 +47,13 @@ const Login = () => {
     }
   };
 
+  console.log("Line 50 Login", expoPushToken);
+
   const handleSubmit = async () => {
     if (email && password) {
       setLoading(true);
       const data = {
-        firebase_token: "",
+        firebase_token: expoPushToken,
         username: email.toLowerCase(),
         password: password,
       };
