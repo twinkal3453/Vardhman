@@ -20,7 +20,8 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": ["INTERNET"],
-      "package": "com.twinkal_raj.Vardhman"
+      "package": "com.twinkal_raj.Vardhman",
+      "googleServicesFile": "./google-services.json"
     },
     "ios": {
       "supportsTablet": true,
