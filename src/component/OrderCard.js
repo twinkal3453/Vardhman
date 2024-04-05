@@ -4,7 +4,14 @@ import { Avatar, Button, Card } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import formatDate from "../Helper/utility";
 
-const LeftContent = (props) => <Avatar.Icon {...props} icon="progress-clock" />;
+const LeftContentPending = (props) => (
+  <Avatar.Icon
+    {...props}
+    style={{ backgroundColor: "#17a2b8" }}
+    icon="progress-clock"
+  />
+);
+const LeftContentApproved = (props) => <Avatar.Icon {...props} icon="check" />;
 
 const OrderCard = ({ item }) => {
   console.log("Line 5", item);
@@ -26,7 +33,9 @@ const OrderCard = ({ item }) => {
           title={`Rs: ${item.total_amount}`}
           titleVariant="titleLarge"
           subtitle={`Date: ${formatDate(item.created_at)}`}
-          left={LeftContent}
+          left={
+            item.status === "Pending" ? LeftContentPending : LeftContentApproved
+          }
         />
       </Card>
     </SafeAreaView>

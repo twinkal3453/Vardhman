@@ -17,7 +17,14 @@ import { useNavigation } from "@react-navigation/native";
 import formatDate from "../../Helper/utility";
 import { Chip } from "react-native-paper";
 
-const LeftContent = (props) => <Avatar.Icon {...props} icon="progress-clock" />;
+const LeftContentPending = (props) => (
+  <Avatar.Icon
+    {...props}
+    style={{ backgroundColor: "#17a2b8" }}
+    icon="progress-clock"
+  />
+);
+const LeftContentApproved = (props) => <Avatar.Icon {...props} icon="check" />;
 
 const OrderCardAdmin = ({ item }) => {
   const navigation = useNavigation();
@@ -38,7 +45,9 @@ const OrderCardAdmin = ({ item }) => {
           titleVariant="titleLarge"
           subtitle={`Rs: ${item.total_amount}`}
           subtitleVariant="titleMedium"
-          left={LeftContent}
+          left={
+            item.status === "Pending" ? LeftContentPending : LeftContentApproved
+          }
         />
         <Card.Content>
           <View style={{ width: 150, marginBottom: 5 }}>

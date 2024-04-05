@@ -58,23 +58,33 @@ const HomeDetail = ({ route }) => {
     return value + ".00";
   };
 
+  /**
+   * The handleAdd function retrieves product data from AsyncStorage, updates the quantity of a
+   * product, adds the product to a list, and navigates to the Home screen after a short delay.
+   */
   const handleAdd = async () => {
     try {
+      /* `const prodData = await AsyncStorage.getItem("product");` is retrieving the data stored in the
+     AsyncStorage under the key "product". The retrieved data is then stored in the variable
+     `prodData`. */
       const prodData = await AsyncStorage.getItem("product");
       const productList = JSON.parse(prodData);
+
       data.qty = count;
 
+      /* This block of code is handling the logic for adding a product to the cart stored in
+      AsyncStorage. Here's a breakdown of what it does: */
       if (productList) {
         productList.push(data);
         await AsyncStorage.setItem("product", JSON.stringify(productList));
         setAddedToCart(true);
-        setTimeout(() => {
-          navigation.navigate("Home");
-        }, 500);
       } else {
         await AsyncStorage.setItem("product", JSON.stringify([data]));
+        setAddedToCart(true);
       }
-
+      setTimeout(() => {
+        navigation.navigate("Home");
+      }, 500);
       prodCount.handleProdUpdate(Date.now());
     } catch (error) {
       console.log(error);
