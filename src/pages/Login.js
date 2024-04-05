@@ -58,6 +58,8 @@ const Login = ({ expoPushToken }) => {
         password: password,
       };
 
+      console.log("Line 61 Login data", data);
+
       axios
         .post(`${API()}/user_login`, data, {
           Headers: {
@@ -116,7 +118,7 @@ const Login = ({ expoPushToken }) => {
             <TextInput
               style={styles.inputField}
               mode="outlined"
-              label="Email"
+              label="Username"
               value={email}
               onChangeText={handleCreds("email")}
             />

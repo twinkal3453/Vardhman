@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "666016334774",
+    "project_id": "vardhman-2e747",
+    "storage_bucket": "vardhman-2e747.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666016334774:android:405fa73e227bacc539b717",
+        "android_client_info": {
+          "package_name": "com.twinkal_raj.Vardhman"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCICeUt5N8cJpLLyV0GJyIOxVmYqv2tiXs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

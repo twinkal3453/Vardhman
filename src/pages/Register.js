@@ -99,6 +99,8 @@ const Register = ({ expoPushToken }) => {
       return;
     }
 
+    console.log("Line 102 Register", value);
+
     // Initiating api calls when all conditions passed.
     axios
       .post(`${API()}/user_register`, JSON.stringify(value), {
