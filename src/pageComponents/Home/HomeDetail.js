@@ -1,4 +1,14 @@
-import { StyleSheet, View } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  StatusBar,
+  Keyboard,
+} from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import {
   Avatar,
@@ -13,13 +23,15 @@ import AuthenticateContext from "../../context/auth/AuthenticateContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProductContext from "../../context/product/ProductContext";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import useToast from "../../customHook/useToast";
 
 const HomeDetail = ({ route }) => {
+  const showToast = useToast();
   const navigation = useNavigation();
   const auth = useContext(AuthenticateContext);
   const prodCount = useContext(ProductContext);
   const { data } = route.params;
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState("1");
   const [addedToCart, setAddedToCart] = useState(false);
 
   const getCartData = async () => {
@@ -43,19 +55,25 @@ const HomeDetail = ({ route }) => {
   );
 
   const handleCount = (data) => {
-    if (data === "inc") {
-      setCount(count + 1);
-    } else {
-      if (count > 1) {
-        setCount(count - 1);
-      }
-    }
+    // if (data === "inc") {
+    //   setCount(count + 1);
+    // } else {
+    //   if (count > 1) {
+    //     setCount(count - 1);
+    //   }
+    // }
+    setCount(parseInt(data));
   };
 
   const handleCalcPrice = (data) => {
-    const value = parseFloat(data) * count;
+    let value;
+    if (count) {
+      value = parseFloat(data) * count;
+    } else {
+      value = parseFloat(data) * 1;
+    }
 
-    return value + ".00";
+    return value;
   };
 
   /**
@@ -63,6 +81,10 @@ const HomeDetail = ({ route }) => {
    * product, adds the product to a list, and navigates to the Home screen after a short delay.
    */
   const handleAdd = async () => {
+    if (!count) {
+      showToast("Please add count...", "TOP");
+      return;
+    }
     try {
       /* `const prodData = await AsyncStorage.getItem("product");` is retrieving the data stored in the
      AsyncStorage under the key "product". The retrieved data is then stored in the variable
@@ -92,32 +114,41 @@ const HomeDetail = ({ route }) => {
   };
 
   return (
-    <View style={styles.card_Parent}>
-      <Card>
-        <Card.Cover
-          style={styles.item_img}
-          source={{
-            uri: `${IMG()}${data.product_image}`,
-          }}
-        />
-        <Card.Content>
-          <Text variant="titleMedium">{data.product_name_eng}</Text>
-          <Text variant="titleMedium">{data.product_name_guj}</Text>
-          <Text variant="titleMedium">{data.product_name_hin}</Text>
-          <Text variant="titleMedium">HSN Code: {data.product_hsn_code}</Text>
-        </Card.Content>
-        <Card.Content style={styles.middle_contnet}>
-          <Text variant="titleMedium">
-            Rs.{handleCalcPrice(data.product_price)}
-          </Text>
-          <Text variant="bodyMedium">
-            Qty: {data.product_qty} * {count}
-          </Text>
-        </Card.Content>
-        {auth.role === 0 && (
-          <Card.Actions>
-            <View style={styles.counter_parent}>
-              <FAB
+    <SafeAreaView style={styles.container}>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20} // You may need to adjust this value
+        >
+          <View style={styles.card_Parent}>
+            <Card>
+              <Card.Cover
+                style={styles.item_img}
+                source={{
+                  uri: `${IMG()}${data.product_image}`,
+                }}
+              />
+              <Card.Content>
+                <Text variant="titleMedium">{data.product_name_eng}</Text>
+                <Text variant="titleMedium">{data.product_name_guj}</Text>
+                <Text variant="titleMedium">{data.product_name_hin}</Text>
+                <Text variant="titleMedium">
+                  HSN Code: {data.product_hsn_code}
+                </Text>
+              </Card.Content>
+              <Card.Content style={styles.middle_contnet}>
+                <Text variant="titleMedium">
+                  Rs.{handleCalcPrice(data.product_price)}
+                </Text>
+                <Text variant="bodyMedium">
+                  Qty: {data.product_qty} * {count ? count : "0"}
+                </Text>
+              </Card.Content>
+              {auth.role === 0 && (
+                <Card.Actions>
+                  <View style={styles.counter_parent}>
+                    {/*<FAB
                 size="small"
                 icon="minus"
                 style={styles.fab}
@@ -129,31 +160,48 @@ const HomeDetail = ({ route }) => {
                 icon="plus"
                 style={styles.fab}
                 onPress={() => handleCount("inc")}
-              />
-            </View>
-            <Button
-              disabled={addedToCart}
-              onPress={handleAdd}
-              mode="outlined"
-              icon="cart"
-            >
-              Add to cart
-            </Button>
-          </Card.Actions>
-        )}
-      </Card>
-      {addedToCart && (
-        <View style={styles.alert_card}>
-          <Text style={{ textAlign: "center", fontWeight: 500 }}>
-            Added to cart...
-          </Text>
-        </View>
-      )}
-    </View>
+                />*/}
+                    <Text style={{ fontSize: 16, fontWeight: "500" }}>
+                      Add Count:{" "}
+                    </Text>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={(e) => handleCount(e)}
+                      value={count}
+                      keyboardType="numeric"
+                      placeholder="Count"
+                    />
+                  </View>
+                  <Button
+                    disabled={addedToCart}
+                    onPress={handleAdd}
+                    mode="outlined"
+                    icon="cart"
+                  >
+                    Add to cart
+                  </Button>
+                </Card.Actions>
+              )}
+            </Card>
+            {addedToCart && (
+              <View style={styles.alert_card}>
+                <Text style={{ textAlign: "center", fontWeight: 500 }}>
+                  Added to cart...
+                </Text>
+              </View>
+            )}
+          </View>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: StatusBar.currentHeight,
+  },
   item_img: {
     borderRadius: 4,
     padding: 5,
@@ -180,6 +228,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffb8b8",
     padding: 10,
     borderRadius: 10,
+  },
+  input: {
+    borderColor: "grey",
+    borderWidth: 1,
+    width: 70,
+    height: 40,
+    borderRadius: 40,
+    paddingHorizontal: 10,
   },
 });
 
