@@ -15,6 +15,10 @@ const OrderListCard = ({ item }) => {
 
   console.log("Line 16>>>>", language, item);
 
+  /**
+   * The function `handleName` returns the product name based on the specified language.
+   * @returns The `handleName` function is returning the product name based on the specified `language`.
+   */
   const handleName = () => {
     const returnName = {
       hindi: item.product_name_hin,
@@ -61,9 +65,11 @@ const OrderListCard = ({ item }) => {
           <Text numberOfLines={3} style={styles.textName}>
             {handleName()}
           </Text>
+          {/**
           <Text>
             <Text style={styles.content}>Price:</Text> {item.amount}
           </Text>
+        */}
           <Text>
             <Text style={styles.content}>Grand Total:</Text> {item.grand_total}
           </Text>

@@ -5,33 +5,77 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar, Button, Card, FAB } from "react-native-paper";
 import { useFocusEffect } from "@react-navigation/native";
+import { API } from "../../../backend";
+import axios from "axios";
 
 const LeftContent = (props) => <Avatar.Icon {...props} icon="account" />;
 
 const ProfileDetail = () => {
   const [userDetail, setuserDetail] = useState([]);
+  const [token, setToken] = useState("");
   const auth = useContext(AuthenticateContext);
   const navigation = useNavigation();
 
-  // handling managing single user.
+  /**
+   * The function `handleUser` navigates to the "Update" screen with user details.
+   * @param data - The `data` parameter in the `handleUser` function seems to be unused in the provided
+   * code snippet. If you have a specific question or need assistance with something related to the
+   * `data` parameter, please let me know how you would like to use it in the function.
+   */
   const handleUser = (data) => {
     navigation.navigate("Update", {
       detail: userDetail,
     });
   };
 
-  const handleLogout = async () => {
+  console.log("Line 23", userDetail, token);
+
+  /**
+   * The `handleLogout` function sends a POST request to a server endpoint for user logout, removes
+   * user and product data from AsyncStorage, and performs additional actions like changing routes and
+   * handling user roles.
+   */
+  const handleLogout = () => {
     try {
-      await AsyncStorage.removeItem("user");
-      // Vibration.vibrate(500);
-      await AsyncStorage.removeItem("product");
-      auth.changeRoute(false);
-      auth.handleRole();
+      const data = {
+        userId: userDetail.id,
+      };
+
+      let config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        url: `${API()}/user_logout`,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        data: data,
+      };
+
+      axios
+        .request(config)
+        .then(async (response) => {
+          if (response.status === 200) {
+            console.log("Line 36 Logged out");
+            await AsyncStorage.removeItem("user");
+            // Vibration.vibrate(500);
+            await AsyncStorage.removeItem("product");
+            auth.changeRoute(false);
+            auth.handleRole();
+          }
+        })
+        .catch((error) => {
+          console.log("Line 50", error.response.data);
+        });
     } catch (e) {
       // remove error
     }
   };
-  //Function is to make sure that user is already logged in or not.
+
+  /**
+   * The function `handleRouteAuth` retrieves user data and token from AsyncStorage and sets them in the
+   * component state.
+   */
   const handleRouteAuth = async () => {
     try {
       const userData = JSON.parse(await AsyncStorage.getItem("user"));
@@ -39,11 +83,15 @@ const ProfileDetail = () => {
       const user = JSON.parse(userData);
 
       setuserDetail(user.userData);
+      setToken(user.token);
     } catch (e) {
       // remove error
     }
   };
 
+  /* The `useFocusEffect` hook is used in React Navigation to run an effect when the screen comes into
+ focus. In this code snippet, `useFocusEffect` is being used to call the `handleRouteAuth` function
+ when the `ProfileDetail` screen comes into focus. */
   useFocusEffect(
     React.useCallback(() => {
       handleRouteAuth();
